@@ -6,15 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="STREZLESS AI helps businesses connect with customers through AI and automation.">
   <title>STREZLESS AI | Business Automation</title>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     html { scroll-behavior: smooth; }
+
     body {
       font-family: Arial, sans-serif;
       background: #07111f;
       color: #fff;
       line-height: 1.6;
     }
+
     header {
       padding: 18px 7%;
       display: flex;
@@ -23,14 +27,22 @@
       background: #0b192a;
       border-bottom: 1px solid #1d3047;
     }
-    .logo { font-size: 23px; font-weight: bold; color: #38d9c2; }
+
+    .logo {
+      font-size: 23px;
+      font-weight: bold;
+      color: #38d9c2;
+    }
+
     nav { display: flex; gap: 20px; }
     nav a { color: #d5e1ef; text-decoration: none; }
+
     .hero {
       padding: 85px 7%;
       text-align: center;
       background: radial-gradient(circle at top, #153c51, #07111f 65%);
     }
+
     .tag {
       display: inline-block;
       padding: 7px 15px;
@@ -40,25 +52,45 @@
       font-size: 13px;
       margin-bottom: 20px;
     }
+
     h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.15; }
     h1 span, h2, h3 { color: #38d9c2; }
-    .hero p { max-width: 650px; margin: 20px auto; color: #bdcbd9; }
+
+    .hero p {
+      max-width: 650px;
+      margin: 20px auto;
+      color: #bdcbd9;
+    }
+
     section { padding: 65px 7%; }
-    .section-heading { text-align: center; max-width: 700px; margin: 0 auto 35px; }
-    .section-heading p { color: #bdcbd9; margin-top: 10px; }
+
+    .section-heading {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 35px;
+    }
+
+    .section-heading p {
+      color: #bdcbd9;
+      margin-top: 10px;
+    }
+
     .features {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 18px;
     }
+
     .feature-card, .panel {
       background: #102239;
       border: 1px solid #203b56;
       padding: 22px;
       border-radius: 13px;
     }
+
     .feature-card h3 { margin: 10px 0; }
     .feature-card p { color: #bdcbd9; font-size: 14px; }
+
     .button, button {
       display: inline-block;
       background: #38d9c2;
@@ -71,12 +103,20 @@
       cursor: pointer;
       margin: 6px 3px;
     }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .button.secondary {
       background: transparent;
       border: 1px solid #38d9c2;
       color: #38d9c2;
     }
+
     .auth-area { background: #0b192a; }
+
     .auth-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -84,8 +124,14 @@
       max-width: 900px;
       margin: auto;
     }
-    label { display: block; margin: 12px 0 5px; color: #d5e1ef; }
-    input {
+
+    label {
+      display: block;
+      margin: 12px 0 5px;
+      color: #d5e1ef;
+    }
+
+    input, textarea {
       width: 100%;
       padding: 12px;
       border-radius: 7px;
@@ -93,19 +139,39 @@
       background: #07111f;
       color: white;
       font-size: 16px;
+      font-family: inherit;
     }
+
+    textarea { resize: vertical; }
+
     .panel h2 { margin-bottom: 12px; }
-    .message { margin-top: 12px; color: #38d9c2; overflow-wrap: anywhere; }
+
+    .message {
+      margin-top: 12px;
+      color: #38d9c2;
+      overflow-wrap: anywhere;
+    }
+
     .error { color: #ff9b9b; }
+
     #dashboard { display: none; }
+
     .business-item {
-      padding: 12px;
+      padding: 14px;
       margin-top: 10px;
       background: #07111f;
       border: 1px solid #203b56;
       border-radius: 8px;
       overflow-wrap: anywhere;
     }
+
+    .business-item strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    #workspaceEditor { display: none; }
+
     footer {
       padding: 25px 7%;
       text-align: center;
@@ -113,6 +179,7 @@
       color: #91a3b7;
       font-size: 13px;
     }
+
     @media(max-width: 650px) {
       header { flex-wrap: wrap; gap: 12px; }
       nav { flex-wrap: wrap; gap: 12px; }
@@ -121,6 +188,7 @@
     }
   </style>
 </head>
+
 <body>
 
 <header>
@@ -134,13 +202,17 @@
 </header>
 
 <main>
+
   <section class="hero" id="home">
     <div class="tag">THE FUTURE OF BUSINESS AUTOMATION</div>
+
     <h1>Make Your Business <span>Smarter</span> With AI</h1>
+
     <p>
       Manage business conversations, build AI assistants and
       simplify everyday tasks with STREZLESS AI.
     </p>
+
     <a href="#account" class="button">Create Your Account</a>
     <a href="#features" class="button secondary">Explore Features</a>
   </section>
@@ -150,27 +222,33 @@
       <h2>One Platform. More Possibilities.</h2>
       <p>Tools designed to help businesses grow.</p>
     </div>
+
     <div class="features">
       <div class="feature-card">
         <h3>🤖 AI Chatbots</h3>
         <p>Build assistants to answer common customer questions.</p>
       </div>
+
       <div class="feature-card">
         <h3>⚡ Automation</h3>
         <p>Simplify repetitive tasks and customer conversations.</p>
       </div>
+
       <div class="feature-card">
         <h3>💬 Messaging</h3>
         <p>Organize customer conversations in one place.</p>
       </div>
+
       <div class="feature-card">
         <h3>📊 Business Dashboard</h3>
         <p>Manage your business workspaces and activity.</p>
       </div>
+
       <div class="feature-card">
         <h3>👥 Customer Management</h3>
         <p>Keep your customer information organized.</p>
       </div>
+
       <div class="feature-card">
         <h3>🌍 Multi-Business Platform</h3>
         <p>Manage separate businesses under your account.</p>
@@ -185,8 +263,10 @@
     </div>
 
     <div id="authForms" class="auth-grid">
+
       <div class="panel">
         <h2>Create Account</h2>
+
         <form id="signupForm">
           <label for="fullName">Full name</label>
           <input id="fullName" type="text" autocomplete="name" required>
@@ -196,76 +276,86 @@
 
           <label for="signupPassword">Password (at least 8 characters)</label>
           <input id="signupPassword" type="password" minlength="8"
-                 autocomplete="new-password" required>
+            autocomplete="new-password" required>
 
           <button type="submit">Register</button>
         </form>
+
         <p id="signupMessage" class="message" aria-live="polite"></p>
       </div>
 
       <div class="panel">
         <h2>Login</h2>
+
         <form id="loginForm">
           <label for="loginEmail">Email address</label>
           <input id="loginEmail" type="email" autocomplete="email" required>
 
           <label for="loginPassword">Password</label>
           <input id="loginPassword" type="password"
-                 autocomplete="current-password" required>
+            autocomplete="current-password" required>
 
           <button type="submit">Login</button>
         </form>
+
         <p id="loginMessage" class="message" aria-live="polite"></p>
       </div>
+
     </div>
 
     <div id="dashboard" class="panel" style="max-width:900px;margin:auto;">
       <h2>Your Business Dashboard</h2>
+
       <p id="welcomeMessage"></p>
+
       <button id="logoutButton" type="button">Logout</button>
 
       <hr style="border-color:#35516d;margin:20px 0;">
 
       <h2>Register a Business</h2>
+
       <form id="businessForm">
         <label for="businessName">Business name</label>
         <input id="businessName" type="text" maxlength="120" required>
+
         <button type="submit">Add Business</button>
       </form>
+
       <p id="businessMessage" class="message" aria-live="polite"></p>
 
       <h2 style="margin-top:25px;">Your Businesses</h2>
+
       <div id="businessList">Loading your businesses...</div>
-<div id="workspaceEditor" style="display:none;margin-top:25px;">
-  <hr style="border-color:#35516d;margin:20px 0;">
 
-  <h2>Edit Business Workspace</h2>
+      <div id="workspaceEditor" style="margin-top:25px;">
+        <hr style="border-color:#35516d;margin:20px 0;">
 
-  <form id="workspaceForm">
-    <label for="editBusinessName">Business Name</label>
-    <input id="editBusinessName" type="text" maxlength="120" required>
+        <h2>Edit Business Workspace</h2>
 
-    <label for="editDescription">Business Description</label>
-    <textarea id="editDescription" rows="4" maxlength="2000"
-      style="width:100%;padding:12px;border-radius:7px;
-      background:#07111f;color:white;border:1px solid #35516d;"></textarea>
+        <form id="workspaceForm">
+          <label for="editBusinessName">Business Name</label>
+          <input id="editBusinessName" type="text" maxlength="120" required>
 
-    <label for="editPhone">Phone Number</label>
-    <input id="editPhone" type="tel">
+          <label for="editDescription">Business Description</label>
+          <textarea id="editDescription" rows="4" maxlength="2000"></textarea>
 
-    <label for="editEmail">Business Email</label>
-    <input id="editEmail" type="email">
+          <label for="editPhone">Phone Number</label>
+          <input id="editPhone" type="tel">
 
-    <label for="editWebsite">Website</label>
-    <input id="editWebsite" type="url" placeholder="https://example.com">
+          <label for="editEmail">Business Email</label>
+          <input id="editEmail" type="email">
 
-    <button type="submit">Save Business Changes</button>
-    <button type="button" id="cancelWorkspace"
-      class="button secondary">Cancel</button>
-  </form>
+          <label for="editWebsite">Website</label>
+          <input id="editWebsite" type="url" placeholder="https://example.com">
 
-  <p id="workspaceMessage" class="message"></p>
-</div>
+          <button type="submit">Save Business Changes</button>
+
+          <button type="button" id="cancelWorkspace"
+            class="button secondary">Cancel</button>
+        </form>
+
+        <p id="workspaceMessage" class="message" aria-live="polite"></p>
+      </div>
     </div>
   </section>
 
@@ -278,6 +368,7 @@
       </p>
     </div>
   </section>
+
 </main>
 
 <footer>
@@ -289,15 +380,24 @@
   import { createClient } from
     "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  // Replace the placeholder below with your Supabase Publishable key.
+  // Keep your real Supabase project URL.
   const SUPABASE_URL = "https://irmeakzndaszehoowecf.supabase.co";
+
+  // Replace this placeholder with your Supabase Publishable key.
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_0Vph1Q6tV9rnfTEnkG3BTA_q0duWkgZ";
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
   const $ = (id) => document.getElementById(id);
 
   $("year").textContent = new Date().getFullYear();
+
+  // Shared account and workspace state.
+  let currentUserId = null;
+  let selectedBusinessId = null;
 
   function showMessage(id, message, isError = false) {
     const element = $(id);
@@ -306,21 +406,33 @@
   }
 
   function showDashboard(user) {
+    currentUserId = user.id;
+
     $("authForms").style.display = "none";
     $("dashboard").style.display = "block";
+
     $("welcomeMessage").textContent =
       "Signed in as: " + user.email;
+
     loadBusinesses();
   }
 
   function showAuthForms() {
+    currentUserId = null;
+    selectedBusinessId = null;
+
     $("authForms").style.display = "grid";
     $("dashboard").style.display = "none";
+
     $("businessList").textContent = "";
+    $("workspaceEditor").style.display = "none";
+    $("workspaceForm").reset();
   }
 
+  // ACCOUNT REGISTRATION
   $("signupForm").addEventListener("submit", async (event) => {
     event.preventDefault();
+
     showMessage("signupMessage", "Creating your account...");
 
     const fullName = $("fullName").value.trim();
@@ -341,7 +453,7 @@
       return;
     }
 
-    if (data.session) {
+    if (data.session && data.user) {
       showMessage("signupMessage", "Account created. You are signed in.");
       showDashboard(data.user);
     } else {
@@ -354,8 +466,10 @@
     $("signupForm").reset();
   });
 
+  // ACCOUNT LOGIN
   $("loginForm").addEventListener("submit", async (event) => {
     event.preventDefault();
+
     showMessage("loginMessage", "Signing in...");
 
     const email = $("loginEmail").value.trim();
@@ -372,10 +486,12 @@
     }
 
     showMessage("loginMessage", "Login successful.");
+
     showDashboard(data.user);
     $("loginForm").reset();
   });
 
+  // LOGOUT
   $("logoutButton").addEventListener("click", async () => {
     const { error } = await supabase.auth.signOut();
 
@@ -388,103 +504,149 @@
     showMessage("loginMessage", "You have logged out.");
   });
 
+  // LOAD BUSINESSES BELONGING TO THE SIGNED-IN USER
   async function loadBusinesses() {
-    let selectedBusinessId = null;
+    if (!currentUserId) return;
 
-async function loadBusinesses() {
-  $("businessList").textContent = "Loading...";
+    $("businessList").textContent = "Loading your businesses...";
 
-  const { data, error } = await supabase
-    .from("businesses")
-    .select("id, business_name, description, phone, email, website")
-    .order("created_at", { ascending: false });
+    const { data, error } = await supabase
+      .from("businesses")
+      .select("id, business_name, description, phone, email, website")
+      .eq("owner_id", currentUserId)
+      .order("created_at", { ascending: false });
 
-  if (error) {
-    $("businessList").textContent =
-      "Could not load businesses: " + error.message;
-    return;
-  }
+    if (error) {
+      $("businessList").textContent =
+        "Could not load businesses: " + error.message;
+      return;
+    }
 
-  $("businessList").replaceChildren();
+    $("businessList").replaceChildren();
 
-  if (!data || data.length === 0) {
-    $("businessList").textContent =
-      "You have not registered a business yet.";
-    return;
-  }
+    if (!data || data.length === 0) {
+      $("businessList").textContent =
+        "You have not registered a business yet.";
+      return;
+    }
 
-  data.forEach((business) => {
-    const item = document.createElement("div");
-    item.className = "business-item";
+    data.forEach((business) => {
+      const item = document.createElement("div");
+      item.className = "business-item";
 
-    const name = document.createElement("strong");
-    name.textContent = business.business_name;
+      const name = document.createElement("strong");
+      name.textContent = business.business_name;
 
-    const openButton = document.createElement("button");
-    openButton.type = "button";
-    openButton.textContent = "Open Workspace";
+      const openButton = document.createElement("button");
+      openButton.type = "button";
+      openButton.textContent = "Open Workspace";
 
-    openButton.addEventListener("click", () => {
-      selectedBusinessId = business.id;
+      openButton.addEventListener("click", () => {
+        selectedBusinessId = business.id;
 
-      $("editBusinessName").value = business.business_name || "";
-      $("editDescription").value = business.description || "";
-      $("editPhone").value = business.phone || "";
-      $("editEmail").value = business.email || "";
-      $("editWebsite").value = business.website || "";
+        $("editBusinessName").value = business.business_name || "";
+        $("editDescription").value = business.description || "";
+        $("editPhone").value = business.phone || "";
+        $("editEmail").value = business.email || "";
+        $("editWebsite").value = business.website || "";
 
-      $("workspaceEditor").style.display = "block";
-      showMessage("workspaceMessage", "Editing: " + business.business_name);
+        $("workspaceEditor").style.display = "block";
+
+        showMessage(
+          "workspaceMessage",
+          "Editing: " + business.business_name
+        );
+
+        $("workspaceEditor").scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      });
+
+      item.appendChild(name);
+      item.appendChild(openButton);
+
+      $("businessList").appendChild(item);
     });
+  }
 
-    item.appendChild(name);
-    item.appendChild(document.createElement("br"));
-    item.appendChild(openButton);
-    $("businessList").appendChild(item);
+  // SAVE BUSINESS WORKSPACE CHANGES
+  $("workspaceForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!selectedBusinessId || !currentUserId) {
+      showMessage(
+        "workspaceMessage",
+        "Please select a business first.",
+        true
+      );
+      return;
+    }
+
+    showMessage("workspaceMessage", "Saving changes...");
+
+    const updates = {
+      business_name: $("editBusinessName").value.trim(),
+      description: $("editDescription").value.trim(),
+      phone: $("editPhone").value.trim(),
+      email: $("editEmail").value.trim(),
+      website: $("editWebsite").value.trim(),
+      updated_at: new Date().toISOString()
+    };
+
+    if (!updates.business_name) {
+      showMessage(
+        "workspaceMessage",
+        "Business name is required.",
+        true
+      );
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("businesses")
+      .update(updates)
+      .eq("id", selectedBusinessId)
+      .eq("owner_id", currentUserId)
+      .select("id")
+      .maybeSingle();
+
+    if (error) {
+      showMessage("workspaceMessage", error.message, true);
+      return;
+    }
+
+    if (!data) {
+      showMessage(
+        "workspaceMessage",
+        "No business was updated. Check that you own this business and your database permissions are correct.",
+        true
+      );
+      return;
+    }
+
+    showMessage(
+      "workspaceMessage",
+      "Business profile saved successfully!"
+    );
+
+    await loadBusinesses();
   });
-  }
-$("workspaceForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
 
-  if (!selectedBusinessId) {
-    showMessage("workspaceMessage", "Please select a business.", true);
-    return;
-  }
+  // CANCEL WORKSPACE EDITING
+  $("cancelWorkspace").addEventListener("click", () => {
+    selectedBusinessId = null;
 
-  showMessage("workspaceMessage", "Saving changes...");
+    $("workspaceEditor").style.display = "none";
+    $("workspaceForm").reset();
 
-  const updates = {
-    business_name: $("editBusinessName").value.trim(),
-    description: $("editDescription").value.trim(),
-    phone: $("editPhone").value.trim(),
-    email: $("editEmail").value.trim(),
-    website: $("editWebsite").value.trim(),
-    updated_at: new Date().toISOString()
-  };
+    showMessage("workspaceMessage", "");
+  });
 
-  const { error } = await supabase
-    .from("businesses")
-    .update(updates)
-    .eq("id", selectedBusinessId);
-
-  if (error) {
-    showMessage("workspaceMessage", error.message, true);
-    return;
-  }
-
-  showMessage("workspaceMessage", "Business profile saved successfully!");
-  loadBusinesses();
-});
-
-$("cancelWorkspace").addEventListener("click", () => {
-  selectedBusinessId = null;
-  $("workspaceEditor").style.display = "none";
-  $("workspaceForm").reset();
-  showMessage("workspaceMessage", "");
-});
-
+  // REGISTER A NEW BUSINESS
   $("businessForm").addEventListener("submit", async (event) => {
     event.preventDefault();
+
     showMessage("businessMessage", "Registering your business...");
 
     const businessName = $("businessName").value.trim();
@@ -516,18 +678,29 @@ $("cancelWorkspace").addEventListener("click", () => {
     }
 
     $("businessForm").reset();
-    showMessage("businessMessage", "Business registered successfully.");
-    loadBusinesses();
+
+    showMessage(
+      "businessMessage",
+      "Business registered successfully."
+    );
+
+    await loadBusinesses();
   });
 
-  const { data: sessionData } = await supabase.auth.getSession();
+  // RESTORE AN EXISTING LOGIN SESSION
+  const { data: sessionData, error: sessionError } =
+    await supabase.auth.getSession();
 
-  if (sessionData.session) {
+  if (sessionError) {
+    showMessage("loginMessage", sessionError.message, true);
+    showAuthForms();
+  } else if (sessionData.session) {
     showDashboard(sessionData.session.user);
   } else {
     showAuthForms();
   }
 
+  // KEEP THE WEBSITE UPDATED WHEN AUTHENTICATION CHANGES
   supabase.auth.onAuthStateChange((event, session) => {
     if (session) {
       showDashboard(session.user);
