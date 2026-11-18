@@ -236,6 +236,36 @@
 
       <h2 style="margin-top:25px;">Your Businesses</h2>
       <div id="businessList">Loading your businesses...</div>
+<div id="workspaceEditor" style="display:none;margin-top:25px;">
+  <hr style="border-color:#35516d;margin:20px 0;">
+
+  <h2>Edit Business Workspace</h2>
+
+  <form id="workspaceForm">
+    <label for="editBusinessName">Business Name</label>
+    <input id="editBusinessName" type="text" maxlength="120" required>
+
+    <label for="editDescription">Business Description</label>
+    <textarea id="editDescription" rows="4" maxlength="2000"
+      style="width:100%;padding:12px;border-radius:7px;
+      background:#07111f;color:white;border:1px solid #35516d;"></textarea>
+
+    <label for="editPhone">Phone Number</label>
+    <input id="editPhone" type="tel">
+
+    <label for="editEmail">Business Email</label>
+    <input id="editEmail" type="email">
+
+    <label for="editWebsite">Website</label>
+    <input id="editWebsite" type="url" placeholder="https://example.com">
+
+    <button type="submit">Save Business Changes</button>
+    <button type="button" id="cancelWorkspace"
+      class="button secondary">Cancel</button>
+  </form>
+
+  <p id="workspaceMessage" class="message"></p>
+</div>
     </div>
   </section>
 
@@ -359,34 +389,99 @@
   });
 
   async function loadBusinesses() {
-    $("businessList").textContent = "Loading...";
+    let selectedBusinessId = null;
 
-    const { data, error } = await supabase
-      .from("businesses")
-      .select("id, business_name, created_at")
-      .order("created_at", { ascending: false });
+async function loadBusinesses() {
+  $("businessList").textContent = "Loading...";
 
-    if (error) {
-      $("businessList").textContent =
-        "Could not load businesses: " + error.message;
-      return;
-    }
+  const { data, error } = await supabase
+    .from("businesses")
+    .select("id, business_name, description, phone, email, website")
+    .order("created_at", { ascending: false });
 
-    $("businessList").replaceChildren();
-
-    if (!data || data.length === 0) {
-      $("businessList").textContent =
-        "You have not registered a business yet.";
-      return;
-    }
-
-    data.forEach((business) => {
-      const item = document.createElement("div");
-      item.className = "business-item";
-      item.textContent = business.business_name;
-      $("businessList").appendChild(item);
-    });
+  if (error) {
+    $("businessList").textContent =
+      "Could not load businesses: " + error.message;
+    return;
   }
+
+  $("businessList").replaceChildren();
+
+  if (!data || data.length === 0) {
+    $("businessList").textContent =
+      "You have not registered a business yet.";
+    return;
+  }
+
+  data.forEach((business) => {
+    const item = document.createElement("div");
+    item.className = "business-item";
+
+    const name = document.createElement("strong");
+    name.textContent = business.business_name;
+
+    const openButton = document.createElement("button");
+    openButton.type = "button";
+    openButton.textContent = "Open Workspace";
+
+    openButton.addEventListener("click", () => {
+      selectedBusinessId = business.id;
+
+      $("editBusinessName").value = business.business_name || "";
+      $("editDescription").value = business.description || "";
+      $("editPhone").value = business.phone || "";
+      $("editEmail").value = business.email || "";
+      $("editWebsite").value = business.website || "";
+
+      $("workspaceEditor").style.display = "block";
+      showMessage("workspaceMessage", "Editing: " + business.business_name);
+    });
+
+    item.appendChild(name);
+    item.appendChild(document.createElement("br"));
+    item.appendChild(openButton);
+    $("businessList").appendChild(item);
+  });
+  }
+$("workspaceForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  if (!selectedBusinessId) {
+    showMessage("workspaceMessage", "Please select a business.", true);
+    return;
+  }
+
+  showMessage("workspaceMessage", "Saving changes...");
+
+  const updates = {
+    business_name: $("editBusinessName").value.trim(),
+    description: $("editDescription").value.trim(),
+    phone: $("editPhone").value.trim(),
+    email: $("editEmail").value.trim(),
+    website: $("editWebsite").value.trim(),
+    updated_at: new Date().toISOString()
+  };
+
+  const { error } = await supabase
+    .from("businesses")
+    .update(updates)
+    .eq("id", selectedBusinessId);
+
+  if (error) {
+    showMessage("workspaceMessage", error.message, true);
+    return;
+  }
+
+  showMessage("workspaceMessage", "Business profile saved successfully!");
+  loadBusinesses();
+});
+
+$("cancelWorkspace").addEventListener("click", () => {
+  selectedBusinessId = null;
+  $("workspaceEditor").style.display = "none";
+  $("workspaceForm").reset();
+  showMessage("workspaceMessage", "");
+});
 
   $("businessForm").addEventListener("submit", async (event) => {
     event.preventDefault();
