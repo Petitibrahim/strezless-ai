@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="STREZLESS AI helps businesses connect with customers through intelligent chatbots and automation.">
+  <title>STREZLESS AI | Smarter Business Conversations</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: #ffffff;
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 18px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0b192a;
+      border-bottom: 1px solid #1d3047;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: bold;
+      color: #38d9c2;
+    }
+
+    nav {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+    }
+
+    nav a {
+      color: #d5e1ef;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: #38d9c2;
+    }
+
+    .menu-button {
+      display: none;
+      background: none;
+      border: 0;
+      color: white;
+      font-size: 25px;
+    }
+
+    .hero {
+      padding: 100px 7% 90px;
+      text-align: center;
+      background: radial-gradient(circle at top, #153c51, #07111f 65%);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 15px;
+      border: 1px solid #38d9c2;
+      border-radius: 30px;
+      color: #38d9c2;
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 62px);
+      line-height: 1.15;
+      max-width: 850px;
+      margin: auto;
+    }
+
+    .hero h1 span {
+      color: #38d9c2;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 22px auto;
+      color: #bdcbd9;
+      font-size: 17px;
+    }
+
+    .button {
+      display: inline-block;
+      background: #38d9c2;
+      color: #07111f;
+      padding: 13px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 10px 5px;
+    }
+
+    .button.secondary {
+      background: transparent;
+      border: 1px solid #38d9c2;
+      color: #38d9c2;
+    }
+
+    section {
+      padding: 75px 7%;
+    }
+
+    .section-heading {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+
+    .section-heading h2 {
+      font-size: 34px;
+      margin-bottom: 12px;
+    }
+
+    .section-heading p {
+      color: #aebdcd;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: #102239;
+      border: 1px solid #203b56;
+      padding: 25px;
+      border-radius: 13px;
+    }
+
+    .feature-card .emoji {
+      font-size: 30px;
+    }
+
+    .feature-card h3 {
+      margin: 12px 0 8px;
+      color: #38d9c2;
+    }
+
+    .feature-card p {
+      color: #bdcbd9;
+      font-size: 14px;
+    }
+
+    .about {
+      background: #0b192a;
+      text-align: center;
+    }
+
+    .about p {
+      max-width: 750px;
+      margin: 15px auto;
+      color: #bdcbd9;
+    }
+
+    .contact {
+      text-align: center;
+    }
+
+    footer {
+      padding: 25px 7%;
+      text-align: center;
+      background: #0b192a;
+      color: #91a3b7;
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        flex-wrap: wrap;
+      }
+
+      .menu-button {
+        display: block;
+      }
+
+      nav {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        padding-top: 18px;
+      }
+
+      nav.open {
+        display: flex;
+      }
+
+      .hero {
+        padding: 75px 6%;
+      }
+
+      section {
+        padding: 60px 6%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">STREZLESS AI</div>
+
+    <button class="menu-button" onclick="toggleMenu()" aria-label="Toggle menu">
+      ☰
+    </button>
+
+    <nav id="navigation">
+      <a href="#home" onclick="closeMenu()">Home</a>
+      <a href="#features" onclick="closeMenu()">Features</a>
+      <a href="#about" onclick="closeMenu()">About</a>
+      <a href="#contact" onclick="closeMenu()">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="tag">THE FUTURE OF BUSINESS AUTOMATION</div>
+
+      <h1>
+        Make Your Business <span>Smarter</span> With AI
+      </h1>
+
+      <p>
+        STREZLESS AI is being built to help businesses communicate
+        with customers, automate everyday tasks and manage conversations
+        from one platform.
+      </p>
+
+      <a href="#contact" class="button">Get Started</a>
+      <a href="#features" class="button secondary">Explore Features</a>
+    </section>
+
+    <section id="features">
+      <div class="section-heading">
+        <h2>One Platform. More Possibilities.</h2>
+        <p>
+          Discover the tools we plan to bring together to help businesses grow.
+        </p>
+      </div>
+
+      <div class="features">
+        <div class="feature-card">
+          <div class="emoji">🤖</div>
+          <h3>AI Chatbots</h3>
+          <p>Build intelligent assistants to answer common customer questions.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="emoji">⚡</div>
+          <h3>Automation</h3>
+          <p>Automate repetitive business tasks and customer conversations.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="emoji">💬</div>
+          <h3>Messaging</h3>
+          <p>Bring customer conversations into a more organized workflow.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="emoji">📊</div>
+          <h3>Business Dashboard</h3>
+          <p>Manage your business tools and monitor activity in one place.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="emoji">👥</div>
+          <h3>Customer Management</h3>
+          <p>Organize customer information and keep track of interactions.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="emoji">🌍</div>
+          <h3>Multi-Business Platform</h3>
+          <p>Give different businesses their own accounts and workspaces.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="section-heading">
+        <h2>Our Vision</h2>
+        <p>
+          We want to make useful AI and automation tools accessible to
+          businesses in Cameroon and beyond.
+        </p>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="section-heading">
+        <h2>Be Part of the Journey</h2>
+        <p>
+          STREZLESS AI is under development. Follow our progress as we build
+          a smarter way for businesses to serve their customers.
+        </p>
+        <a href="mailto:contact@strezless.com" class="button">
+          Contact Us
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> STREZLESS AI. All rights reserved.</p>
+    <p>Building smarter business experiences.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("navigation").classList.toggle("open");
+    }
+
+    function closeMenu() {
+      document.getElementById("navigation").classList.remove("open");
+    }
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+  </script>
+
+</body>
+</html>
