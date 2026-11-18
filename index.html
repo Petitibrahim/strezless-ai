@@ -4,27 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="STREZLESS AI helps businesses connect with customers through intelligent chatbots and automation.">
-  <title>STREZLESS AI | Smarter Business Conversations</title>
-
+  <meta name="description" content="STREZLESS AI helps businesses connect with customers through AI and automation.">
+  <title>STREZLESS AI | Business Automation</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: Arial, sans-serif;
       background: #07111f;
-      color: #ffffff;
+      color: #fff;
       line-height: 1.6;
     }
-
     header {
       padding: 18px 7%;
       display: flex;
@@ -33,43 +23,14 @@
       background: #0b192a;
       border-bottom: 1px solid #1d3047;
     }
-
-    .logo {
-      font-size: 23px;
-      font-weight: bold;
-      color: #38d9c2;
-    }
-
-    nav {
-      display: flex;
-      gap: 22px;
-      align-items: center;
-    }
-
-    nav a {
-      color: #d5e1ef;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    nav a:hover {
-      color: #38d9c2;
-    }
-
-    .menu-button {
-      display: none;
-      background: none;
-      border: 0;
-      color: white;
-      font-size: 25px;
-    }
-
+    .logo { font-size: 23px; font-weight: bold; color: #38d9c2; }
+    nav { display: flex; gap: 20px; }
+    nav a { color: #d5e1ef; text-decoration: none; }
     .hero {
-      padding: 100px 7% 90px;
+      padding: 85px 7%;
       text-align: center;
       background: radial-gradient(circle at top, #153c51, #07111f 65%);
     }
-
     .tag {
       display: inline-block;
       padding: 7px 15px;
@@ -77,105 +38,74 @@
       border-radius: 30px;
       color: #38d9c2;
       font-size: 13px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
-
-    .hero h1 {
-      font-size: clamp(36px, 6vw, 62px);
-      line-height: 1.15;
-      max-width: 850px;
-      margin: auto;
+    h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.15; }
+    h1 span, h2, h3 { color: #38d9c2; }
+    .hero p { max-width: 650px; margin: 20px auto; color: #bdcbd9; }
+    section { padding: 65px 7%; }
+    .section-heading { text-align: center; max-width: 700px; margin: 0 auto 35px; }
+    .section-heading p { color: #bdcbd9; margin-top: 10px; }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
     }
-
-    .hero h1 span {
-      color: #38d9c2;
+    .feature-card, .panel {
+      background: #102239;
+      border: 1px solid #203b56;
+      padding: 22px;
+      border-radius: 13px;
     }
-
-    .hero p {
-      max-width: 650px;
-      margin: 22px auto;
-      color: #bdcbd9;
-      font-size: 17px;
-    }
-
-    .button {
+    .feature-card h3 { margin: 10px 0; }
+    .feature-card p { color: #bdcbd9; font-size: 14px; }
+    .button, button {
       display: inline-block;
       background: #38d9c2;
       color: #07111f;
-      padding: 13px 25px;
+      padding: 12px 20px;
+      border: 0;
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
-      margin: 10px 5px;
+      cursor: pointer;
+      margin: 6px 3px;
     }
-
     .button.secondary {
       background: transparent;
       border: 1px solid #38d9c2;
       color: #38d9c2;
     }
-
-    section {
-      padding: 75px 7%;
-    }
-
-    .section-heading {
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto 40px;
-    }
-
-    .section-heading h2 {
-      font-size: 34px;
-      margin-bottom: 12px;
-    }
-
-    .section-heading p {
-      color: #aebdcd;
-    }
-
-    .features {
+    .auth-area { background: #0b192a; }
+    .auth-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 20px;
+      max-width: 900px;
+      margin: auto;
     }
-
-    .feature-card {
-      background: #102239;
+    label { display: block; margin: 12px 0 5px; color: #d5e1ef; }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 7px;
+      border: 1px solid #35516d;
+      background: #07111f;
+      color: white;
+      font-size: 16px;
+    }
+    .panel h2 { margin-bottom: 12px; }
+    .message { margin-top: 12px; color: #38d9c2; overflow-wrap: anywhere; }
+    .error { color: #ff9b9b; }
+    #dashboard { display: none; }
+    .business-item {
+      padding: 12px;
+      margin-top: 10px;
+      background: #07111f;
       border: 1px solid #203b56;
-      padding: 25px;
-      border-radius: 13px;
+      border-radius: 8px;
+      overflow-wrap: anywhere;
     }
-
-    .feature-card .emoji {
-      font-size: 30px;
-    }
-
-    .feature-card h3 {
-      margin: 12px 0 8px;
-      color: #38d9c2;
-    }
-
-    .feature-card p {
-      color: #bdcbd9;
-      font-size: 14px;
-    }
-
-    .about {
-      background: #0b192a;
-      text-align: center;
-    }
-
-    .about p {
-      max-width: 750px;
-      margin: 15px auto;
-      color: #bdcbd9;
-    }
-
-    .contact {
-      text-align: center;
-    }
-
     footer {
       padding: 25px 7%;
       text-align: center;
@@ -183,162 +113,334 @@
       color: #91a3b7;
       font-size: 13px;
     }
-
-    @media (max-width: 700px) {
-      header {
-        flex-wrap: wrap;
-      }
-
-      .menu-button {
-        display: block;
-      }
-
-      nav {
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        padding-top: 18px;
-      }
-
-      nav.open {
-        display: flex;
-      }
-
-      .hero {
-        padding: 75px 6%;
-      }
-
-      section {
-        padding: 60px 6%;
-      }
+    @media(max-width: 650px) {
+      header { flex-wrap: wrap; gap: 12px; }
+      nav { flex-wrap: wrap; gap: 12px; }
+      .hero { padding: 65px 6%; }
+      section { padding: 50px 6%; }
     }
   </style>
 </head>
-
 <body>
 
-  <header>
-    <div class="logo">STREZLESS AI</div>
+<header>
+  <div class="logo">STREZLESS AI</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#features">Features</a>
+    <a href="#account">Account</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
 
-    <button class="menu-button" onclick="toggleMenu()" aria-label="Toggle menu">
-      ☰
-    </button>
+<main>
+  <section class="hero" id="home">
+    <div class="tag">THE FUTURE OF BUSINESS AUTOMATION</div>
+    <h1>Make Your Business <span>Smarter</span> With AI</h1>
+    <p>
+      Manage business conversations, build AI assistants and
+      simplify everyday tasks with STREZLESS AI.
+    </p>
+    <a href="#account" class="button">Create Your Account</a>
+    <a href="#features" class="button secondary">Explore Features</a>
+  </section>
 
-    <nav id="navigation">
-      <a href="#home" onclick="closeMenu()">Home</a>
-      <a href="#features" onclick="closeMenu()">Features</a>
-      <a href="#about" onclick="closeMenu()">About</a>
-      <a href="#contact" onclick="closeMenu()">Contact</a>
-    </nav>
-  </header>
+  <section id="features">
+    <div class="section-heading">
+      <h2>One Platform. More Possibilities.</h2>
+      <p>Tools designed to help businesses grow.</p>
+    </div>
+    <div class="features">
+      <div class="feature-card">
+        <h3>🤖 AI Chatbots</h3>
+        <p>Build assistants to answer common customer questions.</p>
+      </div>
+      <div class="feature-card">
+        <h3>⚡ Automation</h3>
+        <p>Simplify repetitive tasks and customer conversations.</p>
+      </div>
+      <div class="feature-card">
+        <h3>💬 Messaging</h3>
+        <p>Organize customer conversations in one place.</p>
+      </div>
+      <div class="feature-card">
+        <h3>📊 Business Dashboard</h3>
+        <p>Manage your business workspaces and activity.</p>
+      </div>
+      <div class="feature-card">
+        <h3>👥 Customer Management</h3>
+        <p>Keep your customer information organized.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🌍 Multi-Business Platform</h3>
+        <p>Manage separate businesses under your account.</p>
+      </div>
+    </div>
+  </section>
 
-  <main>
-    <section class="hero" id="home">
-      <div class="tag">THE FUTURE OF BUSINESS AUTOMATION</div>
+  <section class="auth-area" id="account">
+    <div class="section-heading">
+      <h2>Your STREZLESS AI Account</h2>
+      <p>Create an account or sign in to access your business workspace.</p>
+    </div>
 
-      <h1>
-        Make Your Business <span>Smarter</span> With AI
-      </h1>
+    <div id="authForms" class="auth-grid">
+      <div class="panel">
+        <h2>Create Account</h2>
+        <form id="signupForm">
+          <label for="fullName">Full name</label>
+          <input id="fullName" type="text" autocomplete="name" required>
 
+          <label for="signupEmail">Email address</label>
+          <input id="signupEmail" type="email" autocomplete="email" required>
+
+          <label for="signupPassword">Password (at least 8 characters)</label>
+          <input id="signupPassword" type="password" minlength="8"
+                 autocomplete="new-password" required>
+
+          <button type="submit">Register</button>
+        </form>
+        <p id="signupMessage" class="message" aria-live="polite"></p>
+      </div>
+
+      <div class="panel">
+        <h2>Login</h2>
+        <form id="loginForm">
+          <label for="loginEmail">Email address</label>
+          <input id="loginEmail" type="email" autocomplete="email" required>
+
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password"
+                 autocomplete="current-password" required>
+
+          <button type="submit">Login</button>
+        </form>
+        <p id="loginMessage" class="message" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <div id="dashboard" class="panel" style="max-width:900px;margin:auto;">
+      <h2>Your Business Dashboard</h2>
+      <p id="welcomeMessage"></p>
+      <button id="logoutButton" type="button">Logout</button>
+
+      <hr style="border-color:#35516d;margin:20px 0;">
+
+      <h2>Register a Business</h2>
+      <form id="businessForm">
+        <label for="businessName">Business name</label>
+        <input id="businessName" type="text" maxlength="120" required>
+        <button type="submit">Add Business</button>
+      </form>
+      <p id="businessMessage" class="message" aria-live="polite"></p>
+
+      <h2 style="margin-top:25px;">Your Businesses</h2>
+      <div id="businessList">Loading your businesses...</div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="section-heading">
+      <h2>Our Vision</h2>
       <p>
-        STREZLESS AI is being built to help businesses communicate
-        with customers, automate everyday tasks and manage conversations
-        from one platform.
+        We are building useful AI and automation tools for businesses
+        in Cameroon and beyond.
       </p>
+    </div>
+  </section>
+</main>
 
-      <a href="#contact" class="button">Get Started</a>
-      <a href="#features" class="button secondary">Explore Features</a>
-    </section>
+<footer>
+  <p>© <span id="year"></span> STREZLESS AI. All rights reserved.</p>
+  <p>Building smarter business experiences.</p>
+</footer>
 
-    <section id="features">
-      <div class="section-heading">
-        <h2>One Platform. More Possibilities.</h2>
-        <p>
-          Discover the tools we plan to bring together to help businesses grow.
-        </p>
-      </div>
+<script type="module">
+  import { createClient } from
+    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-      <div class="features">
-        <div class="feature-card">
-          <div class="emoji">🤖</div>
-          <h3>AI Chatbots</h3>
-          <p>Build intelligent assistants to answer common customer questions.</p>
-        </div>
+  // Replace the placeholder below with your Supabase Publishable key.
+  const SUPABASE_URL = "https://irmeakzndaszehoowecf.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_0Vph1Q6tV9rnfTEnkG3BTA_q0duWkgZ";
 
-        <div class="feature-card">
-          <div class="emoji">⚡</div>
-          <h3>Automation</h3>
-          <p>Automate repetitive business tasks and customer conversations.</p>
-        </div>
+  const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-        <div class="feature-card">
-          <div class="emoji">💬</div>
-          <h3>Messaging</h3>
-          <p>Bring customer conversations into a more organized workflow.</p>
-        </div>
+  const $ = (id) => document.getElementById(id);
 
-        <div class="feature-card">
-          <div class="emoji">📊</div>
-          <h3>Business Dashboard</h3>
-          <p>Manage your business tools and monitor activity in one place.</p>
-        </div>
+  $("year").textContent = new Date().getFullYear();
 
-        <div class="feature-card">
-          <div class="emoji">👥</div>
-          <h3>Customer Management</h3>
-          <p>Organize customer information and keep track of interactions.</p>
-        </div>
+  function showMessage(id, message, isError = false) {
+    const element = $(id);
+    element.textContent = message;
+    element.classList.toggle("error", isError);
+  }
 
-        <div class="feature-card">
-          <div class="emoji">🌍</div>
-          <h3>Multi-Business Platform</h3>
-          <p>Give different businesses their own accounts and workspaces.</p>
-        </div>
-      </div>
-    </section>
+  function showDashboard(user) {
+    $("authForms").style.display = "none";
+    $("dashboard").style.display = "block";
+    $("welcomeMessage").textContent =
+      "Signed in as: " + user.email;
+    loadBusinesses();
+  }
 
-    <section class="about" id="about">
-      <div class="section-heading">
-        <h2>Our Vision</h2>
-        <p>
-          We want to make useful AI and automation tools accessible to
-          businesses in Cameroon and beyond.
-        </p>
-      </div>
-    </section>
+  function showAuthForms() {
+    $("authForms").style.display = "grid";
+    $("dashboard").style.display = "none";
+    $("businessList").textContent = "";
+  }
 
-    <section class="contact" id="contact">
-      <div class="section-heading">
-        <h2>Be Part of the Journey</h2>
-        <p>
-          STREZLESS AI is under development. Follow our progress as we build
-          a smarter way for businesses to serve their customers.
-        </p>
-        <a href="mailto:contact@strezless.com" class="button">
-          Contact Us
-        </a>
-      </div>
-    </section>
-  </main>
+  $("signupForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    showMessage("signupMessage", "Creating your account...");
 
-  <footer>
-    <p>© <span id="year"></span> STREZLESS AI. All rights reserved.</p>
-    <p>Building smarter business experiences.</p>
-  </footer>
+    const fullName = $("fullName").value.trim();
+    const email = $("signupEmail").value.trim();
+    const password = $("signupPassword").value;
 
-  <script>
-    function toggleMenu() {
-      document.getElementById("navigation").classList.toggle("open");
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName },
+        emailRedirectTo: window.location.origin
+      }
+    });
+
+    if (error) {
+      showMessage("signupMessage", error.message, true);
+      return;
     }
 
-    function closeMenu() {
-      document.getElementById("navigation").classList.remove("open");
+    if (data.session) {
+      showMessage("signupMessage", "Account created. You are signed in.");
+      showDashboard(data.user);
+    } else {
+      showMessage(
+        "signupMessage",
+        "Registration received. Check your email and click the verification link before logging in."
+      );
     }
 
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
-  </script>
+    $("signupForm").reset();
+  });
+
+  $("loginForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    showMessage("loginMessage", "Signing in...");
+
+    const email = $("loginEmail").value.trim();
+    const password = $("loginPassword").value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      showMessage("loginMessage", error.message, true);
+      return;
+    }
+
+    showMessage("loginMessage", "Login successful.");
+    showDashboard(data.user);
+    $("loginForm").reset();
+  });
+
+  $("logoutButton").addEventListener("click", async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      showMessage("businessMessage", error.message, true);
+      return;
+    }
+
+    showAuthForms();
+    showMessage("loginMessage", "You have logged out.");
+  });
+
+  async function loadBusinesses() {
+    $("businessList").textContent = "Loading...";
+
+    const { data, error } = await supabase
+      .from("businesses")
+      .select("id, business_name, created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      $("businessList").textContent =
+        "Could not load businesses: " + error.message;
+      return;
+    }
+
+    $("businessList").replaceChildren();
+
+    if (!data || data.length === 0) {
+      $("businessList").textContent =
+        "You have not registered a business yet.";
+      return;
+    }
+
+    data.forEach((business) => {
+      const item = document.createElement("div");
+      item.className = "business-item";
+      item.textContent = business.business_name;
+      $("businessList").appendChild(item);
+    });
+  }
+
+  $("businessForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    showMessage("businessMessage", "Registering your business...");
+
+    const businessName = $("businessName").value.trim();
+
+    if (!businessName) {
+      showMessage("businessMessage", "Enter a business name.", true);
+      return;
+    }
+
+    const { data: userData, error: userError } =
+      await supabase.auth.getUser();
+
+    if (userError || !userData.user) {
+      showMessage("businessMessage", "Please log in again.", true);
+      showAuthForms();
+      return;
+    }
+
+    const { error } = await supabase
+      .from("businesses")
+      .insert({
+        business_name: businessName,
+        owner_id: userData.user.id
+      });
+
+    if (error) {
+      showMessage("businessMessage", error.message, true);
+      return;
+    }
+
+    $("businessForm").reset();
+    showMessage("businessMessage", "Business registered successfully.");
+    loadBusinesses();
+  });
+
+  const { data: sessionData } = await supabase.auth.getSession();
+
+  if (sessionData.session) {
+    showDashboard(sessionData.session.user);
+  } else {
+    showAuthForms();
+  }
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      showDashboard(session.user);
+    } else if (event === "SIGNED_OUT") {
+      showAuthForms();
+    }
+  });
+</script>
 
 </body>
 </html>
