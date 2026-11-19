@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="STREZLESS AI helps businesses connect with customers through AI and automation.">
+  <meta name="description" content="STREZLESS AI helps businesses connect with customers through intelligent AI assistants and automation.">
   <title>STREZLESS AI | Business Automation</title>
 
   <style>
@@ -30,6 +30,8 @@
       align-items: center;
       background: #0b192a;
       border-bottom: 1px solid #1d3047;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .logo {
@@ -41,6 +43,7 @@
     nav {
       display: flex;
       gap: 20px;
+      flex-wrap: wrap;
     }
 
     nav a {
@@ -107,7 +110,7 @@
 
     .feature-card h3 { margin: 10px 0; }
 
-    .feature-card p {
+    .feature-card p, .muted {
       color: #bdcbd9;
       font-size: 14px;
     }
@@ -173,6 +176,11 @@
       border-color: #38d9c2;
     }
 
+    input[type="checkbox"] {
+      width: auto;
+      accent-color: #38d9c2;
+    }
+
     .panel h2 { margin-bottom: 12px; }
 
     .message {
@@ -199,9 +207,21 @@
       margin-top: 25px;
     }
 
-    .muted {
-      color: #bdcbd9;
-      font-size: 14px;
+    #chatbotSection {
+      display: none;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #35516d;
+    }
+
+    .chatbot-status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: #173d39;
+      color: #38d9c2;
+      font-size: 13px;
+      margin: 8px 0;
     }
 
     footer {
@@ -214,13 +234,7 @@
 
     @media(max-width: 650px) {
       header {
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-
-      nav {
-        flex-wrap: wrap;
-        gap: 12px;
+        padding: 18px 6%;
       }
 
       .hero { padding: 65px 6%; }
@@ -245,13 +259,13 @@
 <main>
 
   <section class="hero" id="home">
-    <div class="tag">THE FUTURE OF BUSINESS AUTOMATION</div>
+    <div class="tag">THE FUTURE OF BUSINESS INTELLIGENCE</div>
 
     <h1>Make Your Business <span>Smarter</span> With AI</h1>
 
     <p>
-      Manage business conversations, build AI assistants and
-      simplify everyday tasks with STREZLESS AI.
+      Build intelligent business assistants, manage customer
+      conversations and simplify everyday tasks with STREZLESS AI.
     </p>
 
     <a href="#account" class="button">Create Your Account</a>
@@ -265,10 +279,9 @@
     </div>
 
     <div class="features">
-
       <div class="feature-card">
-        <h3>🤖 AI Chatbots</h3>
-        <p>Build assistants to answer common customer questions.</p>
+        <h3>🤖 Intelligent AI</h3>
+        <p>Build assistants for business questions and general conversations.</p>
       </div>
 
       <div class="feature-card">
@@ -288,14 +301,13 @@
 
       <div class="feature-card">
         <h3>👥 Customer Management</h3>
-        <p>Keep your customer information organized.</p>
+        <p>Keep customer information organized.</p>
       </div>
 
       <div class="feature-card">
         <h3>🌍 Multi-Business Platform</h3>
         <p>Manage separate businesses under your account.</p>
       </div>
-
     </div>
   </section>
 
@@ -359,7 +371,6 @@
     <div id="dashboard" class="panel" style="max-width:900px;margin:auto;">
 
       <h2>Your Business Dashboard</h2>
-
       <p id="welcomeMessage"></p>
 
       <button id="logoutButton" type="button">Logout</button>
@@ -383,7 +394,6 @@
       <p id="businessMessage" class="message" aria-live="polite"></p>
 
       <h2 style="margin-top:25px;">Your Businesses</h2>
-
       <div id="businessList">Loading your businesses...</div>
 
       <div id="workspaceEditor">
@@ -442,6 +452,75 @@
 
         <p id="workspaceMessage" class="message" aria-live="polite"></p>
 
+        <!-- BUSINESS CHATBOT MANAGER -->
+
+        <div id="chatbotSection">
+
+          <hr style="border-color:#35516d;margin:25px 0;">
+
+          <h2>🤖 Your Business AI Chatbot</h2>
+
+          <p class="muted">
+            Create and customize the assistant for this business.
+            Each business has its own chatbot.
+          </p>
+
+          <p id="chatbotStatus" class="chatbot-status">
+            Chatbot settings not loaded
+          </p>
+
+          <form id="chatbotForm">
+
+            <label for="botName">Chatbot Name</label>
+            <input
+              id="botName"
+              type="text"
+              maxlength="100"
+              placeholder="Example: STREZLESS Travel Assistant"
+              required
+            >
+
+            <label for="botWelcome">Welcome Message</label>
+            <textarea
+              id="botWelcome"
+              rows="3"
+              maxlength="1000"
+              placeholder="Hello! How can I help you today?"
+            ></textarea>
+
+            <label for="botInformation">Business Knowledge</label>
+            <textarea
+              id="botInformation"
+              rows="7"
+              maxlength="10000"
+              placeholder="Describe your business, products, services, prices, opening hours and other important information."
+            ></textarea>
+
+            <label style="display:flex;align-items:center;gap:10px;">
+              <input
+                id="botActive"
+                type="checkbox"
+                checked
+              >
+              Activate this chatbot
+            </label>
+
+            <button type="submit" id="saveChatbotButton">
+              Save Chatbot
+            </button>
+
+          </form>
+
+          <p id="chatbotMessage" class="message" aria-live="polite"></p>
+
+          <p class="muted" style="margin-top:12px;">
+            Note: Saving these settings does not yet activate an AI
+            conversation engine. The AI model connection will be added
+            in a later development stage.
+          </p>
+
+        </div>
+
       </div>
 
     </div>
@@ -471,11 +550,13 @@
   import { createClient } from
     "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  // Your Supabase project settings.
-  const SUPABASE_URL = "https://irmeakzndaszehoowecf.supabase.co";
+  // SUPABASE PROJECT SETTINGS
+  const SUPABASE_URL =
+    "https://irmeakzndaszehoowecf.supabase.co";
 
-  // Replace this placeholder with your actual Supabase Publishable key.
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_0Vph1Q6tV9rnfTEnkG3BTA_q0duWkgZ";
+  // Replace this placeholder with your real Publishable key.
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_0Vph1Q6tV9rnfTEnkG3BTA_q0duWkgZ";
 
   const supabase = createClient(
     SUPABASE_URL,
@@ -485,17 +566,19 @@
   const $ = (id) => document.getElementById(id);
 
   let selectedBusinessId = null;
+  let currentUser = null;
 
   $("year").textContent = new Date().getFullYear();
 
   function showMessage(id, message, isError = false) {
     const element = $(id);
-
     element.textContent = message;
     element.classList.toggle("error", isError);
   }
 
   function showDashboard(user) {
+    currentUser = user;
+
     $("authForms").style.display = "none";
     $("dashboard").style.display = "block";
 
@@ -506,16 +589,22 @@
   }
 
   function showAuthForms() {
+    currentUser = null;
+    selectedBusinessId = null;
+
     $("authForms").style.display = "grid";
     $("dashboard").style.display = "none";
 
-    selectedBusinessId = null;
     $("businessList").textContent = "";
     $("workspaceEditor").style.display = "none";
+    $("chatbotSection").style.display = "none";
+
     $("workspaceForm").reset();
+    $("chatbotForm").reset();
   }
 
   // CREATE ACCOUNT
+
   $("signupForm").addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -557,6 +646,7 @@
   });
 
   // LOGIN
+
   $("loginForm").addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -578,11 +668,11 @@
     showMessage("loginMessage", "Login successful.");
 
     showDashboard(data.user);
-
     $("loginForm").reset();
   });
 
   // LOGOUT
+
   $("logoutButton").addEventListener("click", async () => {
     const { error } = await supabase.auth.signOut();
 
@@ -592,17 +682,21 @@
     }
 
     showAuthForms();
-
     showMessage("loginMessage", "You have logged out.");
   });
 
   // LOAD BUSINESSES
+
   async function loadBusinesses() {
-    $("businessList").textContent = "Loading your businesses...";
+    if (!currentUser) return;
+
+    $("businessList").textContent =
+      "Loading your businesses...";
 
     const { data, error } = await supabase
       .from("businesses")
       .select("id, business_name, description, phone, email, website")
+      .eq("owner_id", currentUser.id)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -620,7 +714,6 @@
     }
 
     data.forEach((business) => {
-
       const item = document.createElement("div");
       item.className = "business-item";
 
@@ -631,8 +724,7 @@
       openButton.type = "button";
       openButton.textContent = "Open Workspace";
 
-      openButton.addEventListener("click", () => {
-
+      openButton.addEventListener("click", async () => {
         selectedBusinessId = business.id;
 
         $("editBusinessName").value =
@@ -651,6 +743,7 @@
           business.website || "";
 
         $("workspaceEditor").style.display = "block";
+        $("chatbotSection").style.display = "block";
 
         showMessage(
           "workspaceMessage",
@@ -661,6 +754,8 @@
           behavior: "smooth",
           block: "start"
         });
+
+        await loadChatbot(business);
       });
 
       item.appendChild(name);
@@ -671,7 +766,8 @@
     });
   }
 
-  // SAVE WORKSPACE CHANGES
+  // SAVE BUSINESS WORKSPACE CHANGES
+
   $("workspaceForm").addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -716,7 +812,7 @@
       if (!data) {
         showMessage(
           "workspaceMessage",
-          "No business was updated. Check your business permissions and try again.",
+          "No business was updated. Check your permissions.",
           true
         );
         return;
@@ -743,18 +839,170 @@
   });
 
   // CANCEL WORKSPACE EDITING
-  $("cancelWorkspace").addEventListener("click", () => {
 
+  $("cancelWorkspace").addEventListener("click", () => {
     selectedBusinessId = null;
 
     $("workspaceEditor").style.display = "none";
+    $("chatbotSection").style.display = "none";
 
     $("workspaceForm").reset();
+    $("chatbotForm").reset();
 
     showMessage("workspaceMessage", "");
+    showMessage("chatbotMessage", "");
+  });
+
+  // LOAD CHATBOT FOR THE SELECTED BUSINESS
+
+  async function loadChatbot(business) {
+    if (!selectedBusinessId) return;
+
+    $("chatbotStatus").textContent =
+      "Loading chatbot settings...";
+
+    showMessage("chatbotMessage", "");
+
+    $("chatbotForm").reset();
+
+    const { data, error } = await supabase
+      .from("chatbots")
+      .select(
+        "id, business_id, bot_name, welcome_message, business_information, is_active"
+      )
+      .eq("business_id", selectedBusinessId)
+      .maybeSingle();
+
+    if (error) {
+      $("chatbotStatus").textContent =
+        "Could not load chatbot settings.";
+
+      showMessage(
+        "chatbotMessage",
+        "Chatbot loading error: " + error.message,
+        true
+      );
+      return;
+    }
+
+    if (data) {
+      $("botName").value = data.bot_name || "";
+      $("botWelcome").value =
+        data.welcome_message || "";
+
+      $("botInformation").value =
+        data.business_information || "";
+
+      $("botActive").checked = data.is_active === true;
+
+      $("chatbotStatus").textContent =
+        data.is_active
+          ? "Chatbot settings loaded — Active"
+          : "Chatbot settings loaded — Inactive";
+
+    } else {
+      $("botName").value =
+        business.business_name + " Assistant";
+
+      $("botWelcome").value =
+        "Hello! Welcome to " + business.business_name +
+        ". How can I help you today?";
+
+      $("botInformation").value =
+        business.description || "";
+
+      $("botActive").checked = true;
+
+      $("chatbotStatus").textContent =
+        "New chatbot — Not saved yet";
+    }
+  }
+
+  // CREATE OR UPDATE CHATBOT
+
+  $("chatbotForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!selectedBusinessId) {
+      showMessage(
+        "chatbotMessage",
+        "Please open a business workspace first.",
+        true
+      );
+      return;
+    }
+
+    const saveButton = $("saveChatbotButton");
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving chatbot...";
+
+    showMessage("chatbotMessage", "Saving chatbot settings...");
+
+    const chatbotData = {
+      business_id: selectedBusinessId,
+      bot_name: $("botName").value.trim(),
+      welcome_message: $("botWelcome").value.trim(),
+      business_information: $("botInformation").value.trim(),
+      is_active: $("botActive").checked,
+      updated_at: new Date().toISOString()
+    };
+
+    if (!chatbotData.bot_name) {
+      showMessage(
+        "chatbotMessage",
+        "Please enter a chatbot name.",
+        true
+      );
+
+      saveButton.disabled = false;
+      saveButton.textContent = "Save Chatbot";
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("chatbots")
+        .upsert(chatbotData, {
+          onConflict: "business_id"
+        })
+        .select()
+        .single();
+
+      if (error) {
+        showMessage(
+          "chatbotMessage",
+          "Could not save chatbot: " + error.message,
+          true
+        );
+        return;
+      }
+
+      $("chatbotStatus").textContent =
+        data.is_active
+          ? "Chatbot settings saved — Active"
+          : "Chatbot settings saved — Inactive";
+
+      showMessage(
+        "chatbotMessage",
+        "Your chatbot settings have been saved successfully!"
+      );
+
+    } catch (error) {
+      showMessage(
+        "chatbotMessage",
+        "Unexpected error: " + error.message,
+        true
+      );
+
+    } finally {
+      saveButton.disabled = false;
+      saveButton.textContent = "Save Chatbot";
+    }
   });
 
   // REGISTER A BUSINESS
+
   $("businessForm").addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -811,6 +1059,7 @@
   });
 
   // RESTORE EXISTING LOGIN SESSION
+
   const { data: sessionData, error: sessionError } =
     await supabase.auth.getSession();
 
@@ -829,15 +1078,14 @@
   }
 
   // WATCH FOR LOGIN AND LOGOUT CHANGES
-  supabase.auth.onAuthStateChange((event, session) => {
 
+  supabase.auth.onAuthStateChange((event, session) => {
     if (session) {
       showDashboard(session.user);
 
     } else if (event === "SIGNED_OUT") {
       showAuthForms();
     }
-
   });
 
 </script>
