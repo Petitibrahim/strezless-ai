@@ -104,9 +104,13 @@ PERSONALITY:
       reply: result.response || "I could not generate a response."
     });
 
-  } catch (error) {
+  
+} catch (error) {
+    console.error("STREZLESS AI ERROR:", error);
+
     return Response.json({
-      error: "The AI service encountered an error."
+      success: false,
+      error: error.message || "Unknown AI service error."
     }, { status: 500 });
   }
 }
