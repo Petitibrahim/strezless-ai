@@ -1094,7 +1094,20 @@
         })
       });
 
-      const result = await response.json();
+      const responseText = await response.text();
+
+let result;
+
+try {
+  result = JSON.parse(responseText);
+} catch {
+  throw new Error(
+    "Server returned HTML instead of JSON. HTTP status: " +
+    response.status +
+    ". Response: " +
+    responseText.slice(0, 250)
+  );
+}
 
       if (!response.ok || !result.success) {
         throw new Error(result.error || "The AI request failed.");
