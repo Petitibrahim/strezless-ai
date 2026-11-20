@@ -88,6 +88,7 @@ PERSONALITY:
         ).slice(-10)
       : [];
 
+    
     const result = await env.AI.run("@cf/google/gemma-4-26b-a4b-it", {
       messages: [
         { role: "system", content: systemPrompt },
@@ -98,9 +99,17 @@ PERSONALITY:
       temperature: 0.8
     });
 
-    reply: result.choices?.[0]?.message?.content || result.response || "The AI returned an empty response."
+    const reply =
+      result?.response ||
+      result?.choices?.[0]?.message?.content ||
+      "The AI returned an empty response.";
 
-  
+    return Response.json({
+      success: true,
+      chatbot_name: bot.bot_name,
+      reply: reply
+    });
+
 } catch (error) {
     console.error("STREZLESS AI ERROR:", error);
 
