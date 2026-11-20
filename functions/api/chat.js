@@ -98,11 +98,7 @@ PERSONALITY:
       temperature: 0.8
     });
 
-    return Response.json({
-      success: true,
-      chatbot_name: bot.bot_name,
-      reply: result.response || "I could not generate a response."
-    });
+    reply: result.choices?.[0]?.message?.content || result.response || "The AI returned an empty response."
 
   
 } catch (error) {
