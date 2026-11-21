@@ -1113,9 +1113,11 @@ function formatAIMessage(message) {
 }
 
   
+
 function addAIChatMessage(role, message) {
   const container = $("aiChatMessages");
-  const item = document.createElement("p");
+
+  const item = document.createElement("div");
 
   item.style.padding = "14px";
   item.style.margin = "10px 0";
@@ -1123,7 +1125,6 @@ function addAIChatMessage(role, message) {
   item.style.fontSize = "16px";
   item.style.lineHeight = "1.7";
   item.style.color = "#172033";
-  item.style.whiteSpace = "pre-wrap";
   item.style.overflowWrap = "anywhere";
   item.style.fontWeight = "400";
 
@@ -1133,41 +1134,57 @@ function addAIChatMessage(role, message) {
   const label = document.createElement("strong");
   label.textContent =
     role === "user" ? "You: " : "STREZLESS AI: ";
+  label.style.display = "block";
   label.style.color = "#102a43";
   label.style.fontWeight = "700";
 
-  const content = document.createElement("span");
+  const content = document.createElement("div");
   content.innerHTML = formatAIMessage(message);
   content.style.color = "#172033";
 
   item.appendChild(label);
   item.appendChild(content);
 
-if (role === "assistant") {
-  const copyButton = document.createElement("button");
+  if (role === "assistant") {
+    const copyButton = document.createElement("button");
 
-  copyButton.textContent = "📋 Copy";
-  copyButton.type = "button";
-  copyButton.style.display = "block";
-  copyButton.style.marginTop = "10px";
-  copyButton.style.padding = "7px 14px";
-  copyButton.style.border = "1px solid #2563eb";
-  copyButton.style.borderRadius = "7px";
-  copyButton.style.background = "#ffffff";
-  copyButton.style.color = "#1d4ed8";
-  copyButton.style.cursor = "pointer";
+    copyButton.type = "button";
+    copyButton.textContent = "📋 Copy";
+    copyButton.style.display = "inline-block";
+    copyButton.style.marginTop = "12px";
+    copyButton.style.padding = "8px 14px";
+    copyButton.style.border = "1px solid #2563eb";
+    copyButton.style.borderRadius = "7px";
+    copyButton.style.background = "#ffffff";
+    copyButton.style.color = "#1d4ed8";
+    copyButton.style.cursor = "pointer";
 
-  copyButton.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(message);
-      copyButton.textContent = "✓ Copied!";
-    } catch (error) {
-      copyButton.textContent = "Copy unavailable";
-    }
-  });
+    copyButton.addEventListener("click", async () => {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(message);
+        } else {
+          const temp = document.createElement("textarea");
+          temp.value = message;
+          temp.style.position = "fixed";
+          temp.style.opacity = "0";
+          document.body.appendChild(temp);
+          temp.select();
 
-  item.appendChild(copyButton);
-}
+          const copied = document.execCommand("copy");
+          temp.remove();
+
+          if (!copied) throw new Error("Copy failed");
+        }
+
+        copyButton.textContent = "✓ Copied!";
+      } catch (error) {
+        copyButton.textContent = "Select and copy manually";
+      }
+    });
+
+    item.appendChild(copyButton);
+  }
 
   container.appendChild(item);
 
@@ -1178,7 +1195,7 @@ if (role === "assistant") {
 }
 
 
-function showAITyping() {
+  function showAITyping() {
   const container = $("aiChatMessages");
 
   const typing = document.createElement("p");
@@ -1194,6 +1211,21 @@ function showAITyping() {
   container.scrollTop = container.scrollHeight;
 }
 
+function hideAITyping() {
+const container = $("aiChatMessages");
+
+  const typing = document.createElement("p");
+  typing.id = "aiTypingIndicator";
+  typing.textContent = "STREZLESS AI is typing";
+  typing.style.color = "#263b50";
+  typing.style.fontSize = "15px";
+  typing.style.fontStyle = "italic";
+  typing.style.padding = "10px";
+  typing.style.margin = "8px 0";
+
+  container.appendChild(typing);
+  container.scrollTop = container.scrollHeight;
+}
 function hideAITyping() {
   const typing = $("aiTypingIndicator");
 
@@ -1212,7 +1244,7 @@ function hideAITyping() {
     if (!message) return;
 
     if (!selectedBusinessId) {
-      showMessage("aiChatStatus", "Please open a business workspace first.", true);
+showMessage("aiChatStatus", "Please open a business workspace first.", true);
       return;
     }
 
@@ -1223,9 +1255,8 @@ function hideAITyping() {
     }
 
     const { data: sessionData, error: sessionError } =
-      await supabase.auth.getSession();
-
-    if (sessionError || !sessionData.session) {
+await supabase.auth.getSession();
+if (sessionError || !sessionData.session) {
       showMessage("aiChatStatus", "Please log in again.", true);
       return;
     }
