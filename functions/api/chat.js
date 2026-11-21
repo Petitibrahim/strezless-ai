@@ -98,7 +98,7 @@ PERSONALITY:
       max_tokens: 1000,
       temperature: 0.8
     });
-
+console.log("STREZLESS AI RAW RESULT:", JSON.stringify(result));
     const reply =
       result?.response ||
       result?.choices?.[0]?.message?.content ||
