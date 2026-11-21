@@ -1018,27 +1018,44 @@
   let aiChatHistory = [];
   let aiChatHistoryBusinessId = null;
 
-  function addAIChatMessage(role, message) {
-    const container = $("aiChatMessages");
-    const item = document.createElement("p");
+  
+function addAIChatMessage(role, message) {
+  const container = $("aiChatMessages");
+  const item = document.createElement("p");
 
-    item.style.padding = "10px";
-    item.style.margin = "8px 0";
-    item.style.borderRadius = "8px";
-    item.style.background = role === "user" ? "#dceeff" : "#e8f5e9";
+  item.style.padding = "14px";
+  item.style.margin = "10px 0";
+  item.style.borderRadius = "10px";
+  item.style.fontSize = "16px";
+  item.style.lineHeight = "1.7";
+  item.style.color = "#172033";
+  item.style.whiteSpace = "pre-wrap";
+  item.style.overflowWrap = "anywhere";
+  item.style.fontWeight = "400";
 
-    const label = document.createElement("strong");
-    label.textContent = role === "user" ? "You: " : "STREZLESS AI: ";
+  item.style.background =
+    role === "user" ? "#dceeff" : "#e8f5e9";
 
-    const content = document.createElement("span");
-    content.textContent = message;
+  const label = document.createElement("strong");
+  label.textContent =
+    role === "user" ? "You: " : "STREZLESS AI: ";
+  label.style.color = "#102a43";
+  label.style.fontWeight = "700";
 
-    item.appendChild(label);
-    item.appendChild(content);
-    container.appendChild(item);
+  const content = document.createElement("span");
+  content.textContent = message;
+  content.style.color = "#172033";
 
-    container.scrollTop = container.scrollHeight;
-  }
+  item.appendChild(label);
+  item.appendChild(content);
+  container.appendChild(item);
+
+  container.style.background = "#f5f5f5";
+  container.style.color = "#172033";
+
+  container.scrollTop = container.scrollHeight;
+}
+
 
   $("aiChatForm").addEventListener("submit", async (event) => {
     event.preventDefault();
