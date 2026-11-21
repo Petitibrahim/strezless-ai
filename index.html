@@ -1130,6 +1130,30 @@ function addAIChatMessage(role, message) {
 }
 
 
+function showAITyping() {
+  const container = $("aiChatMessages");
+
+  const typing = document.createElement("p");
+  typing.id = "aiTypingIndicator";
+  typing.textContent = "STREZLESS AI is typing";
+  typing.style.color = "#263b50";
+  typing.style.fontSize = "15px";
+  typing.style.fontStyle = "italic";
+  typing.style.padding = "10px";
+  typing.style.margin = "8px 0";
+
+  container.appendChild(typing);
+  container.scrollTop = container.scrollHeight;
+}
+
+function hideAITyping() {
+  const typing = $("aiTypingIndicator");
+
+  if (typing) {
+    typing.remove();
+  }
+}
+
   $("aiChatForm").addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -1168,6 +1192,7 @@ function addAIChatMessage(role, message) {
     input.value = "";
     sendButton.disabled = true;
     sendButton.textContent = "Thinking...";
+showAITyping();
     showMessage("aiChatStatus", "STREZLESS AI is thinking...");
 
     try {
@@ -1216,6 +1241,7 @@ try {
       showMessage("aiChatStatus", error.message, true);
 
     } finally {
+hideAITyping();
       sendButton.disabled = false;
       sendButton.textContent = "Send Message";
     }
