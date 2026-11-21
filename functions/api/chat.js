@@ -95,7 +95,7 @@ const result = await env.AI.run("@cf/meta/llama-3.3-70b-instruct-fp8-fast", {
     ...safeHistory,
     { role: "user", content: message }
   ],
-  max_tokens: 1200,
+  max_tokens: 3000,
   temperature: 0.7
 });
 
