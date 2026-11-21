@@ -95,7 +95,7 @@ PERSONALITY:
         ...safeHistory,
         { role: "user", content: message }
       ],
-      max_tokens: 1000,
+      max_tokens: 2000,
       temperature: 0.8
     });
 console.log("STREZLESS AI RAW RESULT:", JSON.stringify(result));
