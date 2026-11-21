@@ -94,13 +94,11 @@ const result = await env.AI.run("@cf/google/gemma-4-26b-a4b-it", {
     ...safeHistory,
     { role: "user", content: message }
   ],
-  max_tokens: 2000,
-  temperature: 0.8,
-  chat_template_kwargs: {
-    enable_thinking: false,
-    clear_thinking: true
-  }
-});
+  max_completion_tokens: 4000,
+temperature: 0.8,
+chat_template_kwargs: {
+  enable_thinking: false
+}
     
     
 console.log("STREZLESS AI RAW RESULT:", JSON.stringify(result));
