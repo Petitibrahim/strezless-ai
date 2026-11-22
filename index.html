@@ -1850,6 +1850,88 @@ document.getElementById("customerEnquiryForm")
             card.appendChild(line);
           });
 
+// ENQUIRY STATUS MANAGEMENT
+
+const statusLabel = document.createElement("label");
+statusLabel.textContent = "Update enquiry status: ";
+
+const statusSelect = document.createElement("select");
+
+const statuses = [
+  { value: "new", label: "New" },
+  { value: "contacted", label: "Contacted" },
+  { value: "in_progress", label: "In Progress" },
+  { value: "completed", label: "Completed" }
+];
+
+statuses.forEach(function (status) {
+  const option = document.createElement("option");
+  option.value = status.value;
+  option.textContent = status.label;
+  statusSelect.appendChild(option);
+});
+
+statusSelect.value = enquiry.enquiry_status || "new";
+
+const updateButton = document.createElement("button");
+updateButton.type = "button";
+updateButton.textContent = "Update Status";
+
+const statusMessage = document.createElement("p");
+
+updateButton.addEventListener("click", async function () {
+  updateButton.disabled = true;
+  updateButton.textContent = "Updating...";
+  statusMessage.textContent = "";
+
+  try {
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
+
+    if (sessionError || !sessionData.session) {
+      throw new Error("Please log in again.");
+    }
+
+    const response = await fetch(
+      "/api/update-petitibraheem-enquiry",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":
+            "Bearer " + sessionData.session.access_token
+        },
+        body: JSON.stringify({
+          id: enquiry.id,
+          enquiry_status: statusSelect.value
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.error || "Could not update status."
+      );
+    }
+
+    enquiry.enquiry_status = statusSelect.value;
+    statusMessage.textContent = "Status updated successfully!";
+
+  } catch (error) {
+    statusMessage.textContent =
+      error.message || "Something went wrong.";
+  } finally {
+    updateButton.disabled = false;
+    updateButton.textContent = "Update Status";
+  }
+});
+
+statusLabel.appendChild(statusSelect);
+card.appendChild(statusLabel);
+card.appendChild(updateButton);
+card.appendChild(statusMessage);
           list.appendChild(card);
         });
 
