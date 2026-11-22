@@ -8,7 +8,8 @@ export async function onRequestPost({ request, env }) {
       service_requested,
       project_description,
       project_budget,
-      consent_given
+      consent_given,
+      turnstile_token
     } = await request.json();
 
     // Check required information
@@ -31,6 +32,39 @@ export async function onRequestPost({ request, env }) {
         success: false,
         error: "Customer consent is required."
       }, { status: 400 });
+    }
+
+    // Verify Cloudflare Turnstile security token
+    if (!turnstile_token || !env.TURNSTILE_SECRET_KEY) {
+      return Response.json({
+        success: false,
+        error: "Security verification is required."
+      }, { status: 400 });
+    }
+
+    const turnstileData = new FormData();
+    turnstileData.append("secret", env.TURNSTILE_SECRET_KEY);
+    turnstileData.append("response", turnstile_token);
+
+    const turnstileResponse = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        body: turnstileData
+      }
+    );
+
+    const turnstileResult = await turnstileResponse.json();
+
+    if (
+  !turnstileResponse.ok ||
+  !turnstileResult.success ||
+  turnstileResult.hostname !== "strezless-ai.pages.dev"
+) {
+      return Response.json({
+        success: false,
+        error: "Security verification failed. Please try again."
+      }, { status: 403 });
     }
 
     // Validate field lengths
