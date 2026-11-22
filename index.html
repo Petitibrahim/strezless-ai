@@ -1938,11 +1938,14 @@ card.appendChild(statusMessage);
         message.textContent =
           "Enquiries loaded successfully: " +
           result.enquiries.length;
+} catch (error) {
+  console.error("PETITIBRAHEEM ENQUIRY ERROR:", error);
 
-      } catch (error) {
-        list.textContent = "";
-        message.textContent =
-          error.message || "Something went wrong.";
+  list.textContent = "";
+  message.textContent =
+    error.message || "Something went wrong.";
+}
+      
       } finally {
         button.disabled = false;
         button.textContent = "Load Customer Enquiries";
