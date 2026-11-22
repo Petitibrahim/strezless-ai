@@ -240,6 +240,10 @@
       .hero { padding: 65px 6%; }
       section { padding: 50px 6%; }
     }
+#petitibraheemEnquiries {
+  display: block !important;
+  visibility: visible !important;
+}
   </style>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
@@ -1602,6 +1606,99 @@
       showAuthForms();
     }
   });
+
+  // LOAD PRIVATE PETITIBRAHEEM CUSTOMER ENQUIRIES
+
+  $("loadPetitibraheemEnquiries").addEventListener("click", async function () {
+    const button = this;
+    const message = $("petitibraheemEnquiriesMessage");
+    const list = $("petitibraheemEnquiriesList");
+
+    button.disabled = true;
+    button.textContent = "Loading...";
+    message.textContent = "";
+    list.textContent = "Retrieving enquiries...";
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+
+      if (sessionError || !sessionData.session) {
+        throw new Error("Please log in again.");
+      }
+
+      const response = await fetch(
+        "/api/get-petitibraheem-enquiries",
+        {
+          method: "GET",
+          headers: {
+            "Authorization":
+              "Bearer " + sessionData.session.access_token
+          }
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.error || "Could not load enquiries."
+        );
+      }
+
+      list.replaceChildren();
+
+      if (!result.enquiries || result.enquiries.length === 0) {
+        list.textContent = "No customer enquiries yet.";
+      }
+
+      result.enquiries.forEach(function (enquiry) {
+        const card = document.createElement("div");
+
+        card.style.padding = "16px";
+        card.style.margin = "12px 0";
+        card.style.border = "1px solid #35516d";
+        card.style.borderRadius = "10px";
+
+        const details = [
+          ["Customer", enquiry.customer_name],
+          ["Contact", enquiry.customer_contact],
+          ["Service", enquiry.service_requested],
+          ["Description", enquiry.project_description],
+          ["Budget", enquiry.project_budget || "Not provided"],
+          ["Status", enquiry.enquiry_status]
+        ];
+
+        details.forEach(function (detail) {
+          const line = document.createElement("p");
+          const label = document.createElement("strong");
+
+          label.textContent = detail[0] + ": ";
+          line.appendChild(label);
+          line.appendChild(
+            document.createTextNode(detail[1] || "")
+          );
+
+          card.appendChild(line);
+        });
+
+        list.appendChild(card);
+      });
+
+      message.textContent =
+        "Enquiries loaded successfully: " +
+        result.enquiries.length;
+
+    } catch (error) {
+      list.textContent = "";
+      message.textContent =
+        error.message || "Something went wrong.";
+    } finally {
+      button.disabled = false;
+      button.textContent = "Load Customer Enquiries";
+    }
+  });
+
 
 </script>
 
