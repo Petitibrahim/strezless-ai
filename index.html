@@ -398,6 +398,30 @@
       <h2 style="margin-top:25px;">Your Businesses</h2>
       <div id="businessList">Loading your businesses...</div>
 
+
+<div id="petitibraheemEnquiries" style="margin-top:30px;">
+
+  <hr style="border-color:#35516d;margin:20px 0;">
+
+  <h2>Petitibraheem Customer Enquiries</h2>
+
+  <p class="muted">
+    View and manage enquiries submitted through your public website.
+  </p>
+
+  <button id="loadPetitibraheemEnquiries" type="button">
+    Load Customer Enquiries
+  </button>
+
+  <p id="petitibraheemEnquiriesMessage"></p>
+
+  <div id="petitibraheemEnquiriesList">
+    Your customer enquiries will appear here.
+  </div>
+
+</div>
+
+
       <div id="workspaceEditor">
 
         <hr style="border-color:#35516d;margin:20px 0;">
@@ -1647,6 +1671,105 @@ document.getElementById("customerEnquiryForm")
       submitButton.textContent = "Submit Enquiry";
     }
   });
+
+  // LOAD PRIVATE PETITIBRAHEEM CUSTOMER ENQUIRIES
+
+  document.getElementById("loadPetitibraheemEnquiries")
+    .addEventListener("click", async function () {
+
+      const button = this;
+      const message = document.getElementById(
+        "petitibraheemEnquiriesMessage"
+      );
+      const list = document.getElementById(
+        "petitibraheemEnquiriesList"
+      );
+
+      button.disabled = true;
+      button.textContent = "Loading...";
+      message.textContent = "";
+      list.textContent = "Retrieving enquiries...";
+
+      try {
+        const { data: sessionData, error: sessionError } =
+          await supabase.auth.getSession();
+
+        if (sessionError || !sessionData.session) {
+          throw new Error("Please log in again.");
+        }
+
+        const response = await fetch(
+          "/api/get-petitibraheem-enquiries",
+          {
+            method: "GET",
+            headers: {
+              "Authorization":
+                "Bearer " + sessionData.session.access_token
+            }
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(
+            result.error || "Could not load enquiries."
+          );
+        }
+
+        list.replaceChildren();
+
+        if (!result.enquiries.length) {
+          list.textContent = "No customer enquiries yet.";
+        }
+
+        result.enquiries.forEach(function (enquiry) {
+          const card = document.createElement("div");
+
+          card.style.padding = "16px";
+          card.style.margin = "12px 0";
+          card.style.border = "1px solid #35516d";
+          card.style.borderRadius = "10px";
+
+          const details = [
+            ["Customer", enquiry.customer_name],
+            ["Contact", enquiry.customer_contact],
+            ["Service", enquiry.service_requested],
+            ["Description", enquiry.project_description],
+            ["Budget", enquiry.project_budget || "Not provided"],
+            ["Status", enquiry.enquiry_status]
+          ];
+
+          details.forEach(function (detail) {
+            const line = document.createElement("p");
+            const label = document.createElement("strong");
+
+            label.textContent = detail[0] + ": ";
+            line.appendChild(label);
+            line.appendChild(
+              document.createTextNode(detail[1] || "")
+            );
+
+            card.appendChild(line);
+          });
+
+          list.appendChild(card);
+        });
+
+        message.textContent =
+          "Enquiries loaded successfully: " +
+          result.enquiries.length;
+
+      } catch (error) {
+        list.textContent = "";
+        message.textContent =
+          error.message || "Something went wrong.";
+      } finally {
+        button.disabled = false;
+        button.textContent = "Load Customer Enquiries";
+      }
+    });
+
 </script>
 
 </body>
