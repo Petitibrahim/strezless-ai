@@ -1581,5 +1581,73 @@
 
 </script>
 
+<script>
+document.getElementById("customerEnquiryForm")
+  .addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const form = this;
+    const message = document.getElementById("enquiryMessage");
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    const turnstileToken = form.querySelector(
+      '[name="cf-turnstile-response"]'
+    )?.value;
+
+    if (!turnstileToken) {
+      message.textContent = "Please complete the security verification.";
+      return;
+    }
+
+    const data = {
+      customer_name: document.getElementById("customerName").value,
+      customer_contact: document.getElementById("customerContact").value,
+      service_requested: document.getElementById("serviceRequested").value,
+      project_description: document.getElementById("projectDescription").value,
+      project_budget: document.getElementById("projectBudget").value,
+      consent_given: document.getElementById("enquiryConsent").checked,
+      turnstile_token: turnstileToken
+    };
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Submitting...";
+    message.textContent = "";
+
+    try {
+      const response = await fetch("/api/submit-petitibraheem-enquiry", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "Submission failed.");
+      }
+
+      message.textContent = "Thank you! Your enquiry has been submitted successfully.";
+      form.reset();
+
+      if (window.turnstile) {
+        window.turnstile.reset();
+      }
+
+    } catch (error) {
+      message.textContent = error.message || "Something went wrong. Please try again.";
+
+      if (window.turnstile) {
+        window.turnstile.reset();
+      }
+
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = "Submit Enquiry";
+    }
+  });
+</script>
+
 </body>
 </html>
