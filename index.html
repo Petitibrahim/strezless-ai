@@ -563,6 +563,73 @@
       Looking for AI solutions, website development or digital services?
       Send us your enquiry and our team will get back to you.
     </p>
+
+<form id="customerEnquiryForm">
+
+  <label for="customerName">Full Name *</label>
+  <input
+    type="text"
+    id="customerName"
+    name="customer_name"
+    maxlength="100"
+    required
+    placeholder="Enter your full name"
+  >
+
+  <label for="customerContact">WhatsApp Number or Email *</label>
+  <input
+    type="text"
+    id="customerContact"
+    name="customer_contact"
+    maxlength="200"
+    required
+    placeholder="Enter your WhatsApp number or email"
+  >
+
+  <label for="serviceRequested">Service Needed *</label>
+  <select id="serviceRequested" name="service_requested" required>
+    <option value="">Select a service</option>
+    <option value="AI Solutions">AI Solutions</option>
+    <option value="Website Development">Website Development</option>
+    <option value="App Development">App Development</option>
+    <option value="Digital Services">Digital Services</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <label for="projectDescription">Tell Us About Your Project *</label>
+  <textarea
+    id="projectDescription"
+    name="project_description"
+    maxlength="3000"
+    rows="5"
+    required
+    placeholder="Describe what you need..."
+  ></textarea>
+
+  <label for="projectBudget">Estimated Budget (Optional)</label>
+  <input
+    type="text"
+    id="projectBudget"
+    name="project_budget"
+    maxlength="100"
+    placeholder="Your estimated budget"
+  >
+
+  <label>
+    <input type="checkbox" id="enquiryConsent" required>
+    I agree that Petitibraheem may use my details to respond to this enquiry.
+  </label>
+
+  <div
+    class="cf-turnstile"
+    data-sitekey="0x4AAAAAAGM1M0164QW-fsbR">
+  </div>
+
+  <button type="submit">Submit Enquiry</button>
+
+  <p id="enquiryMessage" aria-live="polite"></p>
+
+</form>
   </div>
 </section>
 </main>
