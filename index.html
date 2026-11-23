@@ -276,7 +276,7 @@
     <a href="#account" class="button">Create Your Account</a>
     <a href="#features" class="button secondary">Explore Features</a>
   
-<a href="#customer-enquiry" class="button secondary">Contact a Business</a>
+<a href="#contact-business" class="button secondary">Contact a Business</a>
 </section>
   <section id="features">
     <div class="section-heading">
@@ -606,6 +606,103 @@
       </p>
     </div>
   </section>
+<!-- PUBLIC CONTACT A BUSINESS SECTION -->
+
+<section id="contact-business">
+
+  <div class="section-heading">
+    <h2>Contact a Business</h2>
+
+    <p>
+      Discover businesses using STREZLESS AI and send them
+      your enquiry directly.
+    </p>
+  </div>
+
+  <form id="businessEnquiryForm">
+
+    <label for="publicBusinessSelect">Choose a Business *</label>
+
+    <select id="publicBusinessSelect" required>
+      <option value="">Loading businesses...</option>
+    </select>
+
+    <label for="publicCustomerName">Full Name *</label>
+
+    <input
+      type="text"
+      id="publicCustomerName"
+      maxlength="100"
+      required
+      placeholder="Enter your full name"
+    >
+
+    <label for="publicCustomerContact">WhatsApp Number or Email *</label>
+
+    <input
+      type="text"
+      id="publicCustomerContact"
+      maxlength="200"
+      required
+      placeholder="Enter your contact details"
+    >
+
+    <label for="publicServiceRequested">Service Needed *</label>
+
+    <input
+      type="text"
+      id="publicServiceRequested"
+      maxlength="150"
+      required
+      placeholder="What service do you need?"
+    >
+
+    <label for="publicProjectDescription">Describe Your Request *</label>
+
+    <textarea
+      id="publicProjectDescription"
+      rows="5"
+      maxlength="3000"
+      required
+      placeholder="Explain what you need..."
+    ></textarea>
+
+    <label for="publicProjectBudget">Your Budget (Optional)</label>
+
+    <input
+      type="text"
+      id="publicProjectBudget"
+      maxlength="100"
+      placeholder="Enter your estimated budget"
+    >
+
+    <label style="display:flex;align-items:center;gap:10px;">
+      <input
+        type="checkbox"
+        id="publicEnquiryConsent"
+        required
+      >
+      I agree to share my information with the selected business.
+    </label>
+
+    <div
+      class="cf-turnstile"
+      data-sitekey="0x4AAAAAAGM1M0164QW-fsbR"
+    ></div>
+
+    <button type="submit" id="publicEnquirySubmit">
+      Send Enquiry
+    </button>
+
+    <p
+      id="publicEnquiryMessage"
+      class="message"
+      aria-live="polite"
+    ></p>
+
+  </form>
+
+</section>
 <section id="customer-enquiry">
   <div class="section-heading">
     <h2>Tell Us About Your Project</h2>
@@ -1956,6 +2053,155 @@ document.getElementById("loadPetitibraheemEnquiries").addEventListener("click", 
     button.textContent = "Load Customer Enquiries";
   }
 });
+</script>
+<script>
+// UNIVERSAL PUBLIC BUSINESS ENQUIRY SYSTEM
+
+const publicBusinessSelect =
+  document.getElementById("publicBusinessSelect");
+
+const businessEnquiryForm =
+  document.getElementById("businessEnquiryForm");
+
+const publicEnquiryMessage =
+  document.getElementById("publicEnquiryMessage");
+
+// LOAD BUSINESSES FOR CUSTOMERS
+
+async function loadPublicBusinesses() {
+  try {
+    publicBusinessSelect.innerHTML =
+      '<option value="">Loading businesses...</option>';
+
+    const response = await fetch("/api/get-public-businesses");
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.error || "Could not load businesses."
+      );
+    }
+
+    publicBusinessSelect.innerHTML =
+      '<option value="">Choose a business</option>';
+
+    if (!result.businesses || result.businesses.length === 0) {
+      publicBusinessSelect.innerHTML =
+        '<option value="">No businesses available yet</option>';
+      return;
+    }
+
+    result.businesses.forEach((business) => {
+      const option = document.createElement("option");
+
+      option.value = business.id;
+      option.textContent = business.business_name;
+
+      publicBusinessSelect.appendChild(option);
+    });
+
+  } catch (error) {
+    publicBusinessSelect.innerHTML =
+      '<option value="">Could not load businesses</option>';
+
+    publicEnquiryMessage.textContent = error.message;
+  }
+}
+
+// SUBMIT CUSTOMER ENQUIRY
+
+businessEnquiryForm.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const submitButton =
+    document.getElementById("publicEnquirySubmit");
+
+  const turnstileToken =
+    this.querySelector('[name="cf-turnstile-response"]')?.value;
+
+  if (!publicBusinessSelect.value) {
+    publicEnquiryMessage.textContent =
+      "Please choose a business.";
+    return;
+  }
+
+  if (!document.getElementById("publicEnquiryConsent").checked) {
+    publicEnquiryMessage.textContent =
+      "Please confirm your consent.";
+    return;
+  }
+
+  if (!turnstileToken) {
+    publicEnquiryMessage.textContent =
+      "Please complete the security verification.";
+    return;
+  }
+
+  const data = {
+    business_id: publicBusinessSelect.value,
+
+    customer_name:
+      document.getElementById("publicCustomerName").value.trim(),
+
+    customer_contact:
+      document.getElementById("publicCustomerContact").value.trim(),
+
+    service_requested:
+      document.getElementById("publicServiceRequested").value.trim(),
+
+    project_description:
+      document.getElementById("publicProjectDescription").value.trim(),
+
+    project_budget:
+      document.getElementById("publicProjectBudget").value.trim(),
+
+    consent_given:
+      document.getElementById("publicEnquiryConsent").checked,
+
+    turnstile_token: turnstileToken
+  };
+
+  submitButton.disabled = true;
+  submitButton.textContent = "Submitting...";
+  publicEnquiryMessage.textContent = "";
+
+  try {
+    const response = await fetch("/api/submit-enquiry", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.error || "Your enquiry could not be submitted."
+      );
+    }
+
+    publicEnquiryMessage.textContent =
+      "Thank you! Your enquiry has been submitted successfully.";
+
+    businessEnquiryForm.reset();
+
+  } catch (error) {
+    publicEnquiryMessage.textContent =
+      error.message || "Something went wrong. Please try again.";
+
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "Send Enquiry";
+  }
+});
+
+// LOAD BUSINESS LIST WHEN PAGE OPENS
+
+loadPublicBusinesses();
+
 </script>
 </body>
 </html>
