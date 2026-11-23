@@ -927,7 +927,147 @@
       $("businessList").appendChild(item);
     });
   }
+  // LOAD UNIVERSAL BUSINESS CUSTOMER ENQUIRIES
 
+  async function loadBusinessEnquiries() {
+    if (!requireSupabase("businessEnquiriesMessage")) return;
+
+    if (!currentUser || !selectedBusinessId) {
+      showMessage(
+        "businessEnquiriesMessage",
+        "Please open a business workspace first.",
+        true
+      );
+      return;
+    }
+
+    const button = $("loadBusinessEnquiries");
+    const list = $("businessEnquiriesList");
+
+    button.disabled = true;
+    button.textContent = "Loading...";
+
+    list.textContent = "Loading customer enquiries...";
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+
+      if (sessionError || !sessionData.session) {
+        throw new Error("Please log in again.");
+      }
+
+      const response = await fetch(
+        "/api/get-customer-enquiries",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":
+              "Bearer " + sessionData.session.access_token
+          },
+          body: JSON.stringify({
+            business_id: selectedBusinessId
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.error || "Could not load enquiries."
+        );
+      }
+
+      list.replaceChildren();
+
+      if (!result.enquiries || result.enquiries.length === 0) {
+        list.textContent =
+          "No customer enquiries have been received yet.";
+
+        showMessage(
+          "businessEnquiriesMessage",
+          "Enquiries loaded successfully: 0"
+        );
+
+        return;
+      }
+
+      result.enquiries.forEach((enquiry) => {
+        const card = document.createElement("div");
+
+        card.style.cssText =
+          "padding:15px;margin:12px 0;border:1px solid #35516d;border-radius:10px;";
+
+        const name = document.createElement("h3");
+        name.textContent = enquiry.customer_name || "Customer";
+
+        const contact = document.createElement("p");
+        contact.textContent =
+          "Contact: " + (enquiry.customer_contact || "Not provided");
+
+        const service = document.createElement("p");
+        service.textContent =
+          "Service: " + (enquiry.service_requested || "Not specified");
+
+        const description = document.createElement("p");
+        description.textContent =
+          "Project: " + (enquiry.project_description || "Not provided");
+
+        const budget = document.createElement("p");
+        budget.textContent =
+          "Budget: " + (enquiry.project_budget || "Not specified");
+
+        const status = document.createElement("p");
+        status.textContent =
+          "Status: " + (enquiry.enquiry_status || "new");
+
+        const date = document.createElement("p");
+        date.textContent =
+          "Received: " +
+          (enquiry.created_at
+            ? new Date(enquiry.created_at).toLocaleString()
+            : "Unknown");
+
+        card.append(
+          name,
+          contact,
+          service,
+          description,
+          budget,
+          status,
+          date
+        );
+
+        list.appendChild(card);
+      });
+
+      showMessage(
+        "businessEnquiriesMessage",
+        "Enquiries loaded successfully: " +
+          result.enquiries.length
+      );
+
+    } catch (error) {
+      list.textContent = "Unable to load enquiries.";
+
+      showMessage(
+        "businessEnquiriesMessage",
+        error.message,
+        true
+      );
+
+    } finally {
+      button.disabled = false;
+      button.textContent = "Load Customer Enquiries";
+    }
+  }
+
+  $("loadBusinessEnquiries").addEventListener(
+    "click",
+    loadBusinessEnquiries
+  );
   // SAVE BUSINESS WORKSPACE CHANGES
 
   $("workspaceForm").addEventListener("submit", async (event) => {
