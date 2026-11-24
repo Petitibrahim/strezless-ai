@@ -1092,53 +1092,130 @@
       }
 
       result.enquiries.forEach((enquiry) => {
-        const card = document.createElement("div");
+  const card = document.createElement("div");
 
-        card.style.cssText =
-          "padding:15px;margin:12px 0;border:1px solid #35516d;border-radius:10px;";
+  card.style.cssText =
+    "padding:15px;margin:12px 0;border:1px solid #35516d;border-radius:10px;";
 
-        const name = document.createElement("h3");
-        name.textContent = enquiry.customer_name || "Customer";
+  const name = document.createElement("h3");
+  name.textContent = enquiry.customer_name || "Customer";
 
-        const contact = document.createElement("p");
-        contact.textContent =
-          "Contact: " + (enquiry.customer_contact || "Not provided");
+  const contact = document.createElement("p");
+  contact.textContent =
+    "Contact: " + (enquiry.customer_contact || "Not provided");
 
-        const service = document.createElement("p");
-        service.textContent =
-          "Service: " + (enquiry.service_requested || "Not specified");
+  const service = document.createElement("p");
+  service.textContent =
+    "Service: " + (enquiry.service_requested || "Not specified");
 
-        const description = document.createElement("p");
-        description.textContent =
-          "Project: " + (enquiry.project_description || "Not provided");
+  const description = document.createElement("p");
+  description.textContent =
+    "Project: " + (enquiry.project_description || "Not provided");
 
-        const budget = document.createElement("p");
-        budget.textContent =
-          "Budget: " + (enquiry.project_budget || "Not specified");
+  const budget = document.createElement("p");
+  budget.textContent =
+    "Budget: " + (enquiry.project_budget || "Not specified");
 
-        const status = document.createElement("p");
-        status.textContent =
-          "Status: " + (enquiry.enquiry_status || "new");
+  const statusLabel = document.createElement("label");
+  statusLabel.textContent = "Enquiry Status: ";
 
-        const date = document.createElement("p");
-        date.textContent =
-          "Received: " +
-          (enquiry.created_at
-            ? new Date(enquiry.created_at).toLocaleString()
-            : "Unknown");
+  const statusSelect = document.createElement("select");
 
-        card.append(
-          name,
-          contact,
-          service,
-          description,
-          budget,
-          status,
-          date
+  const statuses = [
+    { value: "new", label: "New" },
+    { value: "contacted", label: "Contacted" },
+    { value: "in_progress", label: "In Progress" },
+    { value: "completed", label: "Completed" }
+  ];
+
+  statuses.forEach((item) => {
+    const option = document.createElement("option");
+    option.value = item.value;
+    option.textContent = item.label;
+    statusSelect.appendChild(option);
+  });
+
+  statusSelect.value = enquiry.enquiry_status || "new";
+
+  statusLabel.appendChild(statusSelect);
+
+  const updateButton = document.createElement("button");
+  updateButton.type = "button";
+  updateButton.textContent = "Update Status";
+
+  const statusMessage = document.createElement("p");
+
+  updateButton.addEventListener("click", async () => {
+    updateButton.disabled = true;
+    updateButton.textContent = "Updating...";
+    statusMessage.textContent = "";
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+
+      if (sessionError || !sessionData.session) {
+        throw new Error("Please log in again.");
+      }
+
+      const updateResponse = await fetch(
+        "/api/update-customer-enquiry",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":
+              "Bearer " + sessionData.session.access_token
+          },
+          body: JSON.stringify({
+            business_id: selectedBusinessId,
+            enquiry_id: enquiry.id,
+            enquiry_status: statusSelect.value
+          })
+        }
+      );
+
+      const updateResult = await updateResponse.json();
+
+      if (!updateResponse.ok || !updateResult.success) {
+        throw new Error(
+          updateResult.error || "Could not update status."
         );
+      }
 
-        list.appendChild(card);
-      });
+      statusMessage.textContent = "Status updated successfully.";
+
+    } catch (error) {
+      statusMessage.textContent =
+        error.message || "Something went wrong.";
+
+    } finally {
+      updateButton.disabled = false;
+      updateButton.textContent = "Update Status";
+    }
+  });
+
+  const date = document.createElement("p");
+  date.textContent =
+    "Received: " +
+    (enquiry.created_at
+      ? new Date(enquiry.created_at).toLocaleString()
+      : "Unknown");
+
+  card.append(
+    name,
+    contact,
+    service,
+    description,
+    budget,
+    statusLabel,
+    updateButton,
+    statusMessage,
+    date
+  );
+
+  list.appendChild(card);
+});
 
       showMessage(
         "businessEnquiriesMessage",
