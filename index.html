@@ -477,7 +477,24 @@
           >
             Cancel
           </button>
+<hr style="margin:25px 0;border-color:#35516d;">
 
+<h3>Business Account Management</h3>
+
+<p class="muted">
+  Temporarily deactivate or reactivate this business.
+  Deactivation does not delete your business information.
+</p>
+
+<p id="businessAccountStatus"></p>
+
+<button
+  type="button"
+  id="toggleBusinessStatus"
+  class="button secondary"
+>
+  Deactivate Business
+</button>
         </form>
 
         <p id="workspaceMessage" class="message" aria-live="polite"></p>
@@ -954,7 +971,7 @@
 
     const { data, error } = await supabase
       .from("businesses")
-      .select("id, business_name, description, phone, email, website")
+      .select("id, business_name, description, phone, email, website, is_active")
       .eq("owner_id", currentUser.id)
       .order("created_at", { ascending: false });
 
@@ -978,7 +995,10 @@
 
       const name = document.createElement("strong");
       name.textContent = business.business_name;
+const businessStatus = document.createElement("p");
 
+businessStatus.textContent =
+  business.is_active ? "Status: Active" : "Status: Deactivated";
       const openButton = document.createElement("button");
       openButton.type = "button";
       openButton.textContent = "Open Workspace";
@@ -1013,17 +1033,90 @@
           behavior: "smooth",
           block: "start"
         });
+$("businessAccountStatus").textContent =
+  business.is_active
+    ? "Business is currently active."
+    : "Business is currently deactivated.";
 
+$("toggleBusinessStatus").textContent =
+  business.is_active
+    ? "Deactivate Business"
+    : "Reactivate Business";
         await loadChatbot(business);
       });
 
       item.appendChild(name);
-      item.appendChild(document.createElement("br"));
-      item.appendChild(openButton);
+item.appendChild(businessStatus);
+item.appendChild(document.createElement("br"));
+item.appendChild(openButton);
 
       $("businessList").appendChild(item);
     });
   }
+// DEACTIVATE OR REACTIVATE BUSINESS
+
+$("toggleBusinessStatus").addEventListener("click", async () => {
+  if (!requireSupabase("workspaceMessage")) return;
+
+  if (!selectedBusinessId || !currentUser) {
+    showMessage("workspaceMessage", "Please select a business.", true);
+    return;
+  }
+
+  const button = $("toggleBusinessStatus");
+  const newStatus = button.textContent.trim() === "Deactivate Business"
+    ? false
+    : true;
+
+  button.disabled = true;
+  button.textContent = "Updating...";
+
+  try {
+    const { data, error } = await supabase
+      .from("businesses")
+      .update({ is_active: newStatus })
+      .eq("id", selectedBusinessId)
+      .eq("owner_id", currentUser.id)
+      .select("id, is_active")
+      .maybeSingle();
+
+    if (error) {
+      showMessage("workspaceMessage", error.message, true);
+      return;
+    }
+
+    if (!data) {
+      showMessage("workspaceMessage", "Business status was not updated.", true);
+      return;
+    }
+
+    $("businessAccountStatus").textContent = data.is_active
+      ? "Business is currently active."
+      : "Business is currently deactivated.";
+
+    button.textContent = data.is_active
+      ? "Deactivate Business"
+      : "Reactivate Business";
+
+    showMessage(
+      "workspaceMessage",
+      data.is_active
+        ? "Business reactivated successfully!"
+        : "Business deactivated successfully!"
+    );
+
+    await loadBusinesses();
+
+  } catch (error) {
+    showMessage(
+      "workspaceMessage",
+      "Unexpected error: " + error.message,
+      true
+    );
+  } finally {
+    button.disabled = false;
+  }
+});
   // LOAD UNIVERSAL BUSINESS CUSTOMER ENQUIRIES
 
   async function loadBusinessEnquiries() {
