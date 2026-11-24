@@ -57,10 +57,10 @@ export async function onRequestPost({ request, env }) {
     const turnstileResult = await turnstileResponse.json();
 
     if (
-  !turnstileResponse.ok ||
-  !turnstileResult.success ||
-  turnstileResult.hostname !== "strezless-ai.pages.dev"
-) {
+      !turnstileResponse.ok ||
+      !turnstileResult.success ||
+      turnstileResult.hostname !== "strezless-ai.pages.dev"
+    ) {
       return Response.json({
         success: false,
         error: "Security verification failed. Please try again."
@@ -110,9 +110,9 @@ export async function onRequestPost({ request, env }) {
       "Content-Type": "application/json"
     };
 
-    // Verify that the business exists
+    // Verify that the business exists AND is active
     const businessResponse = await fetch(
-      `${env.SUPABASE_URL}/rest/v1/businesses?id=eq.${encodeURIComponent(business_id)}&select=id`,
+      `${env.SUPABASE_URL}/rest/v1/businesses?id=eq.${encodeURIComponent(business_id)}&is_active=eq.true&select=id,is_active`,
       { headers }
     );
 
@@ -125,8 +125,8 @@ export async function onRequestPost({ request, env }) {
     if (!businesses.length) {
       return Response.json({
         success: false,
-        error: "Business not found."
-      }, { status: 404 });
+        error: "This business is unavailable or has been deactivated."
+      }, { status: 403 });
     }
 
     // Verify that the business chatbot is active
