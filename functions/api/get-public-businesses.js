@@ -1,3 +1,4 @@
+
 export async function onRequestGet({ env }) {
   try {
     if (
@@ -15,9 +16,9 @@ export async function onRequestGet({ env }) {
       Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`
     };
 
-    // Get registered businesses
+    // Get only registered businesses that are active
     const businessResponse = await fetch(
-      `${env.SUPABASE_URL}/rest/v1/businesses?select=id,business_name,description&order=business_name.asc`,
+      `${env.SUPABASE_URL}/rest/v1/businesses?select=id,business_name,description&is_active=eq.true&order=business_name.asc`,
       { headers }
     );
 
@@ -49,6 +50,8 @@ export async function onRequestGet({ env }) {
       chatbots.map((bot) => bot.business_id)
     );
 
+    // Include only businesses that are active
+    // and have an active chatbot
     const publicBusinesses = businesses
       .filter((business) => activeBusinessIds.has(business.id))
       .map((business) => ({
