@@ -1272,12 +1272,10 @@ $("loadHistoricalEnquiries").addEventListener("click", async function () {
 
     const enquiries = result.enquiries || [];
 
-    if (enquiries.length === 0) {
-      list.textContent = "No historical customer enquiries found.";
-      message.textContent = "0 historical enquiries.";
-      return;
-    }
+    list.replaceChildren();
 
+message.textContent =
+  "Total historical enquiries: " + enquiries.length;
     enquiries.forEach(function (enquiry) {
       const card = document.createElement("div");
       card.style.border = "1px solid #35516d";
