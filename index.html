@@ -495,6 +495,14 @@
 >
   Deactivate Business
 </button>
+<button
+  type="button"
+  id="deleteBusiness"
+  class="button secondary"
+  style="background:#b91c1c;color:white;margin-top:12px;"
+>
+  Permanently Delete Business
+</button>
         </form>
 
         <p id="workspaceMessage" class="message" aria-live="polite"></p>
@@ -1115,6 +1123,89 @@ $("toggleBusinessStatus").addEventListener("click", async () => {
     );
   } finally {
     button.disabled = false;
+  }
+});
+// PERMANENTLY DELETE BUSINESS
+
+$("deleteBusiness").addEventListener("click", async () => {
+  if (!requireSupabase("workspaceMessage")) return;
+
+  if (!selectedBusinessId || !currentUser) {
+    showMessage("workspaceMessage", "Please select a business first.", true);
+    return;
+  }
+
+  const confirmed = window.confirm(
+    "WARNING: You are about to permanently delete this business.\n\n" +
+    "Its chatbot will also be deleted.\n\n" +
+    "Existing customer enquiries will be preserved, but disconnected from this business.\n\n" +
+    "This action cannot be undone.\n\n" +
+    "Do you really want to continue?"
+  );
+
+  if (!confirmed) return;
+
+  const button = $("deleteBusiness");
+
+  button.disabled = true;
+  button.textContent = "Deleting Business...";
+
+  try {
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
+
+    if (sessionError || !sessionData.session) {
+      throw new Error("Your login session has expired. Please log in again.");
+    }
+
+    const response = await fetch("/api/delete-business", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionData.session.access_token}`
+      },
+      body: JSON.stringify({
+        business_id: selectedBusinessId
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Business deletion failed.");
+    }
+
+    selectedBusinessId = null;
+
+    $("workspaceEditor").style.display = "none";
+    $("chatbotSection").style.display = "none";
+
+    $("workspaceForm").reset();
+    $("chatbotForm").reset();
+
+    $("businessAccountStatus").textContent = "";
+
+    showMessage(
+      "businessMessage",
+      "Business permanently deleted successfully!"
+    );
+
+    await loadBusinesses();
+
+    showMessage(
+      "businessMessage",
+      "Business permanently deleted. Its historical customer enquiries were preserved."
+    );
+
+  } catch (error) {
+    showMessage(
+      "workspaceMessage",
+      error.message || "Something went wrong while deleting the business.",
+      true
+    );
+  } finally {
+    button.disabled = false;
+    button.textContent = "Permanently Delete Business";
   }
 });
   // LOAD UNIVERSAL BUSINESS CUSTOMER ENQUIRIES
