@@ -1233,6 +1233,101 @@ $("deleteBusiness").addEventListener("click", async () => {
     button.textContent = "Permanently Delete Business";
   }
 });
+
+// LOAD HISTORICAL CUSTOMER ENQUIRIES
+
+$("loadHistoricalEnquiries").addEventListener("click", async function () {
+  const button = $("loadHistoricalEnquiries");
+  const message = $("historicalEnquiriesMessage");
+  const list = $("historicalEnquiriesList");
+
+  if (!requireSupabase("historicalEnquiriesMessage")) return;
+
+  button.disabled = true;
+  button.textContent = "Loading Historical Enquiries...";
+  message.textContent = "";
+  list.textContent = "";
+
+  try {
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
+
+    if (sessionError || !sessionData.session) {
+      throw new Error("Your login session has expired. Please log in again.");
+    }
+
+    const response = await fetch("/api/get-historical-enquiries", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionData.session.access_token}`
+      }
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Could not load historical enquiries.");
+    }
+
+    const enquiries = result.enquiries || [];
+
+    if (enquiries.length === 0) {
+      list.textContent = "No historical customer enquiries found.";
+      message.textContent = "0 historical enquiries.";
+      return;
+    }
+
+    enquiries.forEach(function (enquiry) {
+      const card = document.createElement("div");
+      card.style.border = "1px solid #35516d";
+      card.style.padding = "15px";
+      card.style.marginBottom = "15px";
+      card.style.borderRadius = "8px";
+
+      function addDetail(label, value) {
+        const paragraph = document.createElement("p");
+        const strong = document.createElement("strong");
+
+        strong.textContent = label + ": ";
+        paragraph.appendChild(strong);
+        paragraph.appendChild(
+          document.createTextNode(value || "Not provided")
+        );
+
+        card.appendChild(paragraph);
+      }
+
+      addDetail("Business", enquiry.business_name);
+      addDetail("Customer", enquiry.customer_name);
+      addDetail("Contact", enquiry.customer_contact);
+      addDetail("Service", enquiry.service_requested);
+      addDetail("Description", enquiry.project_description);
+      addDetail("Budget", enquiry.project_budget);
+      addDetail("Status", enquiry.enquiry_status);
+      addDetail(
+        "Date",
+        enquiry.created_at
+          ? new Date(enquiry.created_at).toLocaleString()
+          : "Not available"
+      );
+
+      list.appendChild(card);
+    });
+
+    message.textContent =
+      "Historical enquiries loaded successfully: " + enquiries.length;
+
+  } catch (error) {
+    list.textContent = "";
+    message.textContent =
+      error.message || "Something went wrong.";
+  } finally {
+    button.disabled = false;
+    button.textContent = "Load Historical Enquiries";
+  }
+});
+
   // LOAD UNIVERSAL BUSINESS CUSTOMER ENQUIRIES
 
   async function loadBusinessEnquiries() {
