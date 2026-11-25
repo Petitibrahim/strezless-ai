@@ -86,21 +86,22 @@ export async function onRequestPost({ request, env }) {
 
     const business = businesses[0];
 
-    // Preserve business name and detach historical enquiries
-    const enquiriesResponse = await fetch(
-      `${env.SUPABASE_URL}/rest/v1/customer_enquiries?business_id=eq.${encodeURIComponent(businessId)}`,
-      {
-        method: "PATCH",
-        headers: {
-          ...headers,
-          Prefer: "return=minimal"
-        },
-        body: JSON.stringify({
-          business_name: business.business_name,
-          business_id: null
-        })
-      }
-    );
+    // Preserve business name, owner and detach historical enquiries
+const enquiriesResponse = await fetch(
+  `${env.SUPABASE_URL}/rest/v1/customer_enquiries?business_id=eq.${encodeURIComponent(businessId)}`,
+  {
+    method: "PATCH",
+    headers: {
+      ...headers,
+      Prefer: "return=minimal"
+    },
+    body: JSON.stringify({
+      business_name: business.business_name,
+      business_owner_id: user.id,
+      business_id: null
+    })
+  }
+);
 
     if (!enquiriesResponse.ok) {
       return Response.json(
