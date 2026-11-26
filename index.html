@@ -448,6 +448,45 @@
 
   <div id="historicalEnquiriesList">
     Your historical enquiries will appear here.
+</div>
+<!-- HISTORICAL ENQUIRY SUMMARY -->
+
+<div id="historicalEnquirySummary" style="margin-top:25px;">
+
+  <h3>Enquiry Summary</h3>
+
+  <div class="summary-card">
+    <h4>Total Historical Enquiries</h4>
+    <p id="historicalTotal">0</p>
+  </div>
+
+  <div class="summary-card">
+    <h4>New</h4>
+    <p id="historicalNew">0</p>
+  </div>
+
+  <div class="summary-card">
+    <h4>Contacted</h4>
+    <p id="historicalContacted">0</p>
+  </div>
+
+  <div class="summary-card">
+    <h4>In Progress</h4>
+    <p id="historicalInProgress">0</p>
+  </div>
+
+  <div class="summary-card">
+    <h4>Completed</h4>
+    <p id="historicalCompleted">0</p>
+  </div>
+
+  <h3>Enquiries by Business</h3>
+
+  <div id="historicalBusinessSummary">
+    Business summaries will appear here.
+  </div>
+
+</div>
   </div>
 
 </div>
@@ -1271,7 +1310,54 @@ $("loadHistoricalEnquiries").addEventListener("click", async function () {
     }
 
     const enquiries = result.enquiries || [];
+// UPDATE HISTORICAL ENQUIRY SUMMARY
 
+const total = enquiries.length;
+
+const newCount = enquiries.filter(
+  item => item.enquiry_status === "new"
+).length;
+
+const contactedCount = enquiries.filter(
+  item => item.enquiry_status === "contacted"
+).length;
+
+const inProgressCount = enquiries.filter(
+  item => item.enquiry_status === "in_progress"
+).length;
+
+const completedCount = enquiries.filter(
+  item => item.enquiry_status === "completed"
+).length;
+
+$("historicalTotal").textContent = total;
+$("historicalNew").textContent = newCount;
+$("historicalContacted").textContent = contactedCount;
+$("historicalInProgress").textContent = inProgressCount;
+$("historicalCompleted").textContent = completedCount;
+
+// SUMMARY BY BUSINESS
+
+const businessSummary = $("historicalBusinessSummary");
+businessSummary.replaceChildren();
+
+const businessCounts = {};
+
+enquiries.forEach(function (item) {
+  const name = item.business_name || "Unknown Business";
+
+  businessCounts[name] = (businessCounts[name] || 0) + 1;
+});
+
+Object.entries(businessCounts).forEach(function ([name, count]) {
+  const paragraph = document.createElement("p");
+  paragraph.textContent = name + ": " + count + " enquiries";
+  businessSummary.appendChild(paragraph);
+});
+
+if (Object.keys(businessCounts).length === 0) {
+  businessSummary.textContent = "No historical enquiries available.";
+}
 list.replaceChildren();
 
 // SEARCH AND FILTER CONTROLS
