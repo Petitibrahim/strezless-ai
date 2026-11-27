@@ -1,4 +1,4 @@
-‎export async function onRequestPost({ request, env }) {
+export async function onRequestPost({ request, env }) {
 ‎  try {
 ‎    // 1. CHECK SERVER CONFIGURATION
 ‎
