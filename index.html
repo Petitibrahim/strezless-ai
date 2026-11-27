@@ -443,6 +443,27 @@
 
   <p id="businessIntelligenceMessage"></p>
 
+<!-- BUSINESS INTELLIGENCE DATE FILTER -->
+
+<div style="margin-top:20px;">
+
+  <label for="businessDateRange">
+    Filter Enquiries by Date
+  </label>
+
+  <select
+    id="businessDateRange"
+    style="width:100%;padding:12px;margin-top:8px;"
+  >
+    <option value="all">All Time</option>
+    <option value="today">Today</option>
+    <option value="7">Last 7 Days</option>
+    <option value="30">Last 30 Days</option>
+  </select>
+
+</div>
+
+
   <div id="businessIntelligenceContent">
     Your business intelligence report will appear here.
   </div>
@@ -1391,6 +1412,9 @@ $("loadHistoricalEnquiries").addEventListener("click", async function () {
     }
 
     const enquiries = result.enquiries || [];
+
+
+
 // UPDATE HISTORICAL ENQUIRY SUMMARY
 
 const total = enquiries.length;
@@ -3196,9 +3220,54 @@ if (businessIntelligenceButton) {
 
       content.replaceChildren();
 
-      const enquiries = result.enquiries || [];
+      
+const enquiries = result.enquiries || [];
+
+// BUSINESS INTELLIGENCE DATE FILTER
+
+const dateRange = document.getElementById("businessDateRange");
+
+const selectedRange = dateRange
+  ? dateRange.value
+  : "all";
+
+const now = new Date();
+
+let filteredEnquiries = enquiries;
+
+if (selectedRange === "today") {
+  filteredEnquiries = enquiries.filter(item => {
+    const date = new Date(item.created_at);
+
+    return (
+      !isNaN(date.getTime()) &&
+      date.getFullYear() === now.getFullYear() &&
+      date.getMonth() === now.getMonth() &&
+      date.getDate() === now.getDate()
+    );
+  });
+}
+
+if (selectedRange === "7" || selectedRange === "30") {
+  const days = Number(selectedRange);
+
+  const startDate = new Date(now);
+  startDate.setDate(startDate.getDate() - (days - 1));
+  startDate.setHours(0, 0, 0, 0);
+
+  filteredEnquiries = enquiries.filter(item => {
+    const date = new Date(item.created_at);
+
+    return (
+      !isNaN(date.getTime()) &&
+      date >= startDate &&
+      date <= now
+    );
+  });
+}
 
 // PREPARE BUSINESS INTELLIGENCE CHART DATA
+
 
 const statusLabels = [
   "New",
@@ -3208,17 +3277,17 @@ const statusLabels = [
 ];
 
 const statusValues = [
-  enquiries.filter(item => item.enquiry_status === "new").length,
-  enquiries.filter(item => item.enquiry_status === "contacted").length,
-  enquiries.filter(item => item.enquiry_status === "in_progress").length,
-  enquiries.filter(item => item.enquiry_status === "completed").length
+  filteredEnquiries.filter(item => item.enquiry_status === "new").length,
+  filteredEnquiries.filter(item => item.enquiry_status === "contacted").length,
+  filteredEnquiries.filter(item => item.enquiry_status === "in_progress").length,
+  filteredEnquiries.filter(item => item.enquiry_status === "completed").length
 ];
 
 // GROUP ENQUIRIES BY BUSINESS
 
 const businessChartCounts = {};
 
-enquiries.forEach(item => {
+filteredEnquiries.forEach(item => {
   const name = item.business_name || "Unknown Business";
 
   businessChartCounts[name] =
@@ -3231,7 +3300,7 @@ const dailyTrend = {};
 const weeklyTrend = {};
 const monthlyTrend = {};
 
-enquiries.forEach(item => {
+filteredEnquiries.forEach(item => {
   if (!item.created_at) return;
 
   const date = new Date(item.created_at);
@@ -3268,12 +3337,12 @@ enquiries.forEach(item => {
 
       const sources = result.sources || {};
 
-      const total = enquiries.length;
+      const total = filteredEnquiries.length;
 
-      const countStatus = status =>
-        enquiries.filter(
-          item => item.enquiry_status === status
-        ).length;
+const countStatus = status =>
+  filteredEnquiries.filter(
+    item => item.enquiry_status === status
+  ).length;
 
       const newCount = countStatus("new");
       const contactedCount = countStatus("contacted");
@@ -3493,7 +3562,7 @@ if (trendSelector) {
 
       const businessCounts = {};
 
-      enquiries.forEach(item => {
+      filteredEnquiries.forEach(item => {
         const name = item.business_name || "Unknown Business";
 
         businessCounts[name] =
@@ -3529,7 +3598,16 @@ if (trendSelector) {
     }
   });
 }
+// RELOAD BUSINESS INTELLIGENCE WHEN DATE FILTER CHANGES
 
+const businessDateRange =
+  document.getElementById("businessDateRange");
+
+if (businessDateRange && businessIntelligenceButton) {
+  businessDateRange.addEventListener("change", () => {
+    businessIntelligenceButton.click();
+  });
+}
 </script>
 </body>
 </html>
