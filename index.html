@@ -3099,6 +3099,188 @@ businessEnquiryForm.addEventListener("submit", async function(event) {
 
 loadPublicBusinesses();
 
+// STREZLESS AI BUSINESS INTELLIGENCE DASHBOARD
+
+const businessIntelligenceButton = $("loadBusinessIntelligence");
+
+if (businessIntelligenceButton) {
+  businessIntelligenceButton.addEventListener("click", async () => {
+    if (!requireSupabase("businessIntelligenceMessage")) return;
+
+    if (!currentUser) {
+      showMessage(
+        "businessIntelligenceMessage",
+        "Please log in first.",
+        true
+      );
+      return;
+    }
+
+    businessIntelligenceButton.disabled = true;
+    businessIntelligenceButton.textContent = "Loading Report...";
+
+    $("businessIntelligenceMessage").textContent =
+      "Collecting your business enquiry data...";
+
+    $("businessIntelligenceContent").textContent =
+      "Please wait while your report is prepared.";
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+
+      if (sessionError || !sessionData.session) {
+        throw new Error("Your session has expired. Please log in again.");
+      }
+
+      const response = await fetch(
+        "/api/get-business-intelligence",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              `Bearer ${sessionData.session.access_token}`
+          },
+          body: JSON.stringify({})
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.error || "Could not load business intelligence."
+        );
+      }
+
+      const content = $("businessIntelligenceContent");
+      content.replaceChildren();
+
+      const enquiries = result.enquiries || [];
+      const sources = result.sources || {};
+
+      const total = enquiries.length;
+
+      const countStatus = status =>
+        enquiries.filter(
+          item => item.enquiry_status === status
+        ).length;
+
+      const newCount = countStatus("new");
+      const contactedCount = countStatus("contacted");
+      const inProgressCount = countStatus("in_progress");
+      const completedCount = countStatus("completed");
+
+      const conversionRate = total > 0
+        ? ((completedCount / total) * 100).toFixed(1)
+        : "0.0";
+
+      // SUMMARY CARDS
+
+      const summary = document.createElement("div");
+      summary.style.display = "grid";
+      summary.style.gridTemplateColumns =
+        "repeat(auto-fit,minmax(140px,1fr))";
+      summary.style.gap = "12px";
+      summary.style.marginTop = "20px";
+
+      const cards = [
+        ["Total Enquiries", total],
+        ["New", newCount],
+        ["Contacted", contactedCount],
+        ["In Progress", inProgressCount],
+        ["Completed", completedCount],
+        ["Completion Rate", conversionRate + "%"]
+      ];
+
+      cards.forEach(([label, value]) => {
+        const card = document.createElement("div");
+        card.style.padding = "16px";
+        card.style.border = "1px solid #35516d";
+        card.style.borderRadius = "10px";
+
+        const heading = document.createElement("h4");
+        heading.textContent = label;
+
+        const number = document.createElement("p");
+        number.textContent = value;
+        number.style.fontSize = "24px";
+        number.style.fontWeight = "bold";
+
+        card.appendChild(heading);
+        card.appendChild(number);
+        summary.appendChild(card);
+      });
+
+      content.appendChild(summary);
+
+      // ENQUIRY SOURCE SUMMARY
+
+      const sourceHeading = document.createElement("h3");
+      sourceHeading.textContent = "Enquiries by Source";
+      sourceHeading.style.marginTop = "25px";
+      content.appendChild(sourceHeading);
+
+      const sourceList = document.createElement("ul");
+
+      [
+        ["Petitibraheem Direct", sources.petitibraheem || 0],
+        ["Current Businesses", sources.current_businesses || 0],
+        ["Historical Businesses", sources.historical_businesses || 0]
+      ].forEach(([label, value]) => {
+        const item = document.createElement("li");
+        item.textContent = label + ": " + value;
+        sourceList.appendChild(item);
+      });
+
+      content.appendChild(sourceList);
+
+      // ENQUIRIES BY BUSINESS
+
+      const businessHeading = document.createElement("h3");
+      businessHeading.textContent = "Business Performance";
+      businessHeading.style.marginTop = "25px";
+      content.appendChild(businessHeading);
+
+      const businessCounts = {};
+
+      enquiries.forEach(item => {
+        const name = item.business_name || "Unknown Business";
+        businessCounts[name] = (businessCounts[name] || 0) + 1;
+      });
+
+      Object.entries(businessCounts).forEach(([name, count]) => {
+        const paragraph = document.createElement("p");
+        paragraph.textContent = name + ": " + count + " enquiries";
+        content.appendChild(paragraph);
+      });
+
+      if (Object.keys(businessCounts).length === 0) {
+        const empty = document.createElement("p");
+        empty.textContent = "No business enquiries available yet.";
+        content.appendChild(empty);
+      }
+
+      // SUCCESS MESSAGE
+
+      $("businessIntelligenceMessage").textContent =
+        "Business intelligence report loaded successfully.";
+
+    } catch (error) {
+      $("businessIntelligenceMessage").textContent =
+        error.message || "Could not load your report.";
+
+      $("businessIntelligenceContent").textContent =
+        "Please try again.";
+    } finally {
+      businessIntelligenceButton.disabled = false;
+      businessIntelligenceButton.textContent =
+        "Load Business Intelligence";
+    }
+  });
+}
+
 </script>
 </body>
 </html>
