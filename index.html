@@ -3101,33 +3101,34 @@ loadPublicBusinesses();
 
 // STREZLESS AI BUSINESS INTELLIGENCE DASHBOARD
 
-const businessIntelligenceButton = $("loadBusinessIntelligence");
+const businessIntelligenceButton =
+  document.getElementById("loadBusinessIntelligence");
 
 if (businessIntelligenceButton) {
   businessIntelligenceButton.addEventListener("click", async () => {
-    if (!requireSupabase("businessIntelligenceMessage")) return;
 
-    if (!currentUser) {
-      showMessage(
-        "businessIntelligenceMessage",
-        "Please log in first.",
-        true
-      );
+    if (!window.requireSupabase("businessIntelligenceMessage")) return;
+
+    const client = window.supabaseClient;
+
+    if (!client) {
+      document.getElementById("businessIntelligenceMessage").textContent =
+        "Supabase is not available. Please refresh the page.";
       return;
     }
 
     businessIntelligenceButton.disabled = true;
     businessIntelligenceButton.textContent = "Loading Report...";
 
-    $("businessIntelligenceMessage").textContent =
+    document.getElementById("businessIntelligenceMessage").textContent =
       "Collecting your business enquiry data...";
 
-    $("businessIntelligenceContent").textContent =
+    document.getElementById("businessIntelligenceContent").textContent =
       "Please wait while your report is prepared.";
 
     try {
       const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession();
+        await client.auth.getSession();
 
       if (sessionError || !sessionData.session) {
         throw new Error("Your session has expired. Please log in again.");
@@ -3154,7 +3155,9 @@ if (businessIntelligenceButton) {
         );
       }
 
-      const content = $("businessIntelligenceContent");
+      const content =
+        document.getElementById("businessIntelligenceContent");
+
       content.replaceChildren();
 
       const enquiries = result.enquiries || [];
@@ -3172,13 +3175,14 @@ if (businessIntelligenceButton) {
       const inProgressCount = countStatus("in_progress");
       const completedCount = countStatus("completed");
 
-      const conversionRate = total > 0
+      const completionRate = total > 0
         ? ((completedCount / total) * 100).toFixed(1)
         : "0.0";
 
       // SUMMARY CARDS
 
       const summary = document.createElement("div");
+
       summary.style.display = "grid";
       summary.style.gridTemplateColumns =
         "repeat(auto-fit,minmax(140px,1fr))";
@@ -3191,11 +3195,12 @@ if (businessIntelligenceButton) {
         ["Contacted", contactedCount],
         ["In Progress", inProgressCount],
         ["Completed", completedCount],
-        ["Completion Rate", conversionRate + "%"]
+        ["Completion Rate", completionRate + "%"]
       ];
 
       cards.forEach(([label, value]) => {
         const card = document.createElement("div");
+
         card.style.padding = "16px";
         card.style.border = "1px solid #35516d";
         card.style.borderRadius = "10px";
@@ -3220,6 +3225,7 @@ if (businessIntelligenceButton) {
       const sourceHeading = document.createElement("h3");
       sourceHeading.textContent = "Enquiries by Source";
       sourceHeading.style.marginTop = "25px";
+
       content.appendChild(sourceHeading);
 
       const sourceList = document.createElement("ul");
@@ -3236,18 +3242,21 @@ if (businessIntelligenceButton) {
 
       content.appendChild(sourceList);
 
-      // ENQUIRIES BY BUSINESS
+      // BUSINESS PERFORMANCE
 
       const businessHeading = document.createElement("h3");
       businessHeading.textContent = "Business Performance";
       businessHeading.style.marginTop = "25px";
+
       content.appendChild(businessHeading);
 
       const businessCounts = {};
 
       enquiries.forEach(item => {
         const name = item.business_name || "Unknown Business";
-        businessCounts[name] = (businessCounts[name] || 0) + 1;
+
+        businessCounts[name] =
+          (businessCounts[name] || 0) + 1;
       });
 
       Object.entries(businessCounts).forEach(([name, count]) => {
@@ -3262,17 +3271,16 @@ if (businessIntelligenceButton) {
         content.appendChild(empty);
       }
 
-      // SUCCESS MESSAGE
-
-      $("businessIntelligenceMessage").textContent =
+      document.getElementById("businessIntelligenceMessage").textContent =
         "Business intelligence report loaded successfully.";
 
     } catch (error) {
-      $("businessIntelligenceMessage").textContent =
+      document.getElementById("businessIntelligenceMessage").textContent =
         error.message || "Could not load your report.";
 
-      $("businessIntelligenceContent").textContent =
+      document.getElementById("businessIntelligenceContent").textContent =
         "Please try again.";
+
     } finally {
       businessIntelligenceButton.disabled = false;
       businessIntelligenceButton.textContent =
