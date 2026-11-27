@@ -423,6 +423,7 @@
   <div id="petitibraheemEnquiriesList">
     Your customer enquiries will appear here.
   </div>
+
 <!-- STREZLESS AI BUSINESS INTELLIGENCE DASHBOARD -->
 
 <section id="businessIntelligenceDashboard" style="margin-top:40px;">
@@ -444,45 +445,44 @@
 
   <div id="businessIntelligenceContent">
     Your business intelligence report will appear here.
-
-<!-- BUSINESS INTELLIGENCE CHARTS -->
-
-<div id="businessIntelligenceCharts" style="margin-top:30px;">
-
-  <hr style="border-color:#35516d;margin:20px 0;">
-
-  <h3>Business Intelligence Analytics</h3>
-
-  <div style="margin-top:25px;">
-    <h4>Enquiries by Status</h4>
-    <canvas id="businessStatusChart"></canvas>
   </div>
 
-  <div style="margin-top:25px;">
-    <h4>Business Performance</h4>
-    <canvas id="businessPerformanceChart"></canvas>
-  </div>
+  <!-- BUSINESS INTELLIGENCE CHARTS -->
 
-  <div style="margin-top:25px;">
-    <h4>Enquiry Trends</h4>
+  <div id="businessIntelligenceCharts" style="margin-top:30px;">
 
-    <select
-      id="businessTrendPeriod"
-      style="width:100%;padding:12px;margin-bottom:15px;"
-    >
-      <option value="daily">Daily</option>
-      <option value="weekly">Weekly</option>
-      <option value="monthly">Monthly</option>
-    </select>
+    <hr style="border-color:#35516d;margin:20px 0;">
 
-    <canvas id="businessTrendChart"></canvas>
-  </div>
+    <h3>Business Intelligence Analytics</h3>
 
-</div>
+    <div style="margin-top:25px;">
+      <h4>Enquiries by Status</h4>
+      <canvas id="businessStatusChart"></canvas>
+    </div>
+
+    <div style="margin-top:25px;">
+      <h4>Business Performance</h4>
+      <canvas id="businessPerformanceChart"></canvas>
+    </div>
+
+    <div style="margin-top:25px;">
+      <h4>Enquiry Trends</h4>
+
+      <select
+        id="businessTrendPeriod"
+        style="width:100%;padding:12px;margin-bottom:15px;"
+      >
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+
+      <canvas id="businessTrendChart"></canvas>
+    </div>
+
   </div>
 
 </section>
-</div>
 
 <!-- HISTORICAL CUSTOMER ENQUIRIES -->
 
@@ -3192,15 +3192,8 @@ if (businessIntelligenceButton) {
 
       const content =
         document.getElementById("businessIntelligenceContent");
-const charts = document.getElementById(
-  "businessIntelligenceCharts"
-);
 
-if (!charts) {
-  throw new Error(
-    "The businessIntelligenceCharts container was not found."
-  );
-}
+
       content.replaceChildren();
 
       const enquiries = result.enquiries || [];
@@ -3332,34 +3325,11 @@ enquiries.forEach(item => {
 
       content.appendChild(summary);
 
-if (charts) {
-  content.appendChild(charts);
-}
-
 // BUSINESS INTELLIGENCE STATUS CHART
 
 // CHECK BUSINESS INTELLIGENCE CHART ELEMENTS
 
-const statusCanvas =
-  document.getElementById("businessStatusChart");
 
-const performanceCanvas =
-  document.getElementById("businessPerformanceChart");
-
-const trendCanvas =
-  document.getElementById("businessTrendChart");
-
-if (!statusCanvas || !performanceCanvas || !trendCanvas) {
-  const missing = [];
-
-  if (!statusCanvas) missing.push("businessStatusChart");
-  if (!performanceCanvas) missing.push("businessPerformanceChart");
-  if (!trendCanvas) missing.push("businessTrendChart");
-
-  throw new Error(
-    "Missing chart elements: " + missing.join(", ")
-  );
-}
 
 if (window.businessStatusChart instanceof Chart) {
   window.businessStatusChart.destroy();
@@ -3485,11 +3455,12 @@ function renderBusinessTrendChart() {
 
 renderBusinessTrendChart();
 
-trendSelector.addEventListener(
-  "change",
-  renderBusinessTrendChart
-);
-
+if (trendSelector) {
+  trendSelector.addEventListener(
+    "change",
+    renderBusinessTrendChart
+  );
+}
       // ENQUIRY SOURCE SUMMARY
 
       const sourceHeading = document.createElement("h3");
