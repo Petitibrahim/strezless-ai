@@ -3196,6 +3196,11 @@ const charts = document.getElementById(
   "businessIntelligenceCharts"
 );
 
+if (!charts) {
+  throw new Error(
+    "The businessIntelligenceCharts container was not found."
+  );
+}
       content.replaceChildren();
 
       const enquiries = result.enquiries || [];
