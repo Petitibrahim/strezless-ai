@@ -3337,6 +3337,23 @@ filteredEnquiries.forEach(item => {
 
       const sources = result.sources || {};
 
+// CALCULATE DATE-FILTERED ENQUIRY SOURCES
+
+const filteredSources = {
+  petitibraheem: filteredEnquiries.filter(
+    item => item.source === "petitibraheem"
+  ).length,
+
+  current_businesses: filteredEnquiries.filter(
+    item => item.source === "current_business"
+  ).length,
+
+  historical_businesses: filteredEnquiries.filter(
+    item => item.source === "historical_business"
+  ).length
+};
+
+
       const total = filteredEnquiries.length;
 
 const countStatus = status =>
@@ -3541,10 +3558,10 @@ if (trendSelector) {
       const sourceList = document.createElement("ul");
 
       [
-        ["Petitibraheem Direct", sources.petitibraheem || 0],
-        ["Current Businesses", sources.current_businesses || 0],
-        ["Historical Businesses", sources.historical_businesses || 0]
-      ].forEach(([label, value]) => {
+  ["Petitibraheem Direct", filteredSources.petitibraheem],
+  ["Current Businesses", filteredSources.current_businesses],
+  ["Historical Businesses", filteredSources.historical_businesses]
+].forEach(([label, value]) => {
         const item = document.createElement("li");
         item.textContent = label + ": " + value;
         sourceList.appendChild(item);
