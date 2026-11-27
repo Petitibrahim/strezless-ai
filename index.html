@@ -494,7 +494,17 @@
   <h4>Enquiries by Status</h4>
   <canvas id="historicalStatusChart"></canvas>
 </div>
+<div style="margin-top:25px;">
+  <h4>Enquiry Trends Over Time</h4>
 
+<select id="historicalTrendPeriod" style="width:100%;padding:12px;margin-bottom:15px;">
+  <option value="daily">Daily</option>
+  <option value="weekly">Weekly</option>
+  <option value="monthly">Monthly</option>
+</select>
+
+<canvas id="historicalTrendChart"></canvas>
+</div>
 <div style="margin-top:25px;">
   <h4>Enquiries by Business</h4>
   <canvas id="historicalBusinessChart"></canvas>
@@ -1349,6 +1359,46 @@ $("historicalContacted").textContent = contactedCount;
 $("historicalInProgress").textContent = inProgressCount;
 $("historicalCompleted").textContent = completedCount;
 
+// PREPARE HISTORICAL ENQUIRY TREND DATA
+
+const dailyCounts = {};
+const weeklyCounts = {};
+const monthlyCounts = {};
+
+enquiries.forEach(function (item) {
+  if (!item.created_at) return;
+
+  const date = new Date(item.created_at);
+
+  if (isNaN(date.getTime())) return;
+
+  const dailyKey =
+  date.getFullYear() + "-" +
+  String(date.getMonth() + 1).padStart(2, "0") + "-" +
+  String(date.getDate()).padStart(2, "0");
+
+  const monthlyKey =
+    date.getFullYear() + "-" +
+    String(date.getMonth() + 1).padStart(2, "0");
+
+  const weekDate = new Date(date);
+  weekDate.setHours(0, 0, 0, 0);
+
+  const day = weekDate.getDay();
+  weekDate.setDate(
+    weekDate.getDate() - ((day + 6) % 7)
+  );
+
+  const weeklyKey =
+  weekDate.getFullYear() + "-" +
+  String(weekDate.getMonth() + 1).padStart(2, "0") + "-" +
+  String(weekDate.getDate()).padStart(2, "0");
+
+  dailyCounts[dailyKey] = (dailyCounts[dailyKey] || 0) + 1;
+  weeklyCounts[weeklyKey] = (weeklyCounts[weeklyKey] || 0) + 1;
+  monthlyCounts[monthlyKey] = (monthlyCounts[monthlyKey] || 0) + 1;
+});
+
 // HISTORICAL STATUS CHART
 
 if (window.historicalStatusChart instanceof Chart) {
@@ -1432,6 +1482,70 @@ window.historicalBusinessChart = new Chart(businessCanvas, {
     }
   }
 });
+
+// HISTORICAL ENQUIRY TREND CHART
+
+const trendPeriod = $("historicalTrendPeriod");
+
+function renderTrendChart() {
+  if (window.historicalTrendChart instanceof Chart) {
+    window.historicalTrendChart.destroy();
+  }
+
+  let selectedCounts = dailyCounts;
+  let chartTitle = "Daily Enquiries";
+
+  if (trendPeriod.value === "weekly") {
+    selectedCounts = weeklyCounts;
+    chartTitle = "Weekly Enquiries";
+  }
+
+  if (trendPeriod.value === "monthly") {
+    selectedCounts = monthlyCounts;
+    chartTitle = "Monthly Enquiries";
+  }
+
+  const sortedDates = Object.keys(selectedCounts).sort();
+
+  window.historicalTrendChart = new Chart(
+    $("historicalTrendChart"),
+    {
+      type: "line",
+      data: {
+        labels: sortedDates,
+        datasets: [{
+          label: chartTitle,
+          data: sortedDates.map(
+            date => selectedCounts[date]
+          ),
+          tension: 0.3,
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "bottom"
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              precision: 0
+            }
+          }
+        }
+      }
+    }
+  );
+}
+
+renderTrendChart();
+
+trendPeriod.addEventListener("change", renderTrendChart);
+
 if (Object.keys(businessCounts).length === 0) {
   businessSummary.textContent = "No historical enquiries available.";
 }
