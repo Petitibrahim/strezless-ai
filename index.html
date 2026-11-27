@@ -3333,6 +3333,29 @@ if (charts) {
 
 // BUSINESS INTELLIGENCE STATUS CHART
 
+// CHECK BUSINESS INTELLIGENCE CHART ELEMENTS
+
+const statusCanvas =
+  document.getElementById("businessStatusChart");
+
+const performanceCanvas =
+  document.getElementById("businessPerformanceChart");
+
+const trendCanvas =
+  document.getElementById("businessTrendChart");
+
+if (!statusCanvas || !performanceCanvas || !trendCanvas) {
+  const missing = [];
+
+  if (!statusCanvas) missing.push("businessStatusChart");
+  if (!performanceCanvas) missing.push("businessPerformanceChart");
+  if (!trendCanvas) missing.push("businessTrendChart");
+
+  throw new Error(
+    "Missing chart elements: " + missing.join(", ")
+  );
+}
+
 if (window.businessStatusChart instanceof Chart) {
   window.businessStatusChart.destroy();
 }
