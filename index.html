@@ -444,6 +444,41 @@
 
   <div id="businessIntelligenceContent">
     Your business intelligence report will appear here.
+
+<!-- BUSINESS INTELLIGENCE CHARTS -->
+
+<div id="businessIntelligenceCharts" style="margin-top:30px;">
+
+  <hr style="border-color:#35516d;margin:20px 0;">
+
+  <h3>Business Intelligence Analytics</h3>
+
+  <div style="margin-top:25px;">
+    <h4>Enquiries by Status</h4>
+    <canvas id="businessStatusChart"></canvas>
+  </div>
+
+  <div style="margin-top:25px;">
+    <h4>Business Performance</h4>
+    <canvas id="businessPerformanceChart"></canvas>
+  </div>
+
+  <div style="margin-top:25px;">
+    <h4>Enquiry Trends</h4>
+
+    <select
+      id="businessTrendPeriod"
+      style="width:100%;padding:12px;margin-bottom:15px;"
+    >
+      <option value="daily">Daily</option>
+      <option value="weekly">Weekly</option>
+      <option value="monthly">Monthly</option>
+    </select>
+
+    <canvas id="businessTrendChart"></canvas>
+  </div>
+
+</div>
   </div>
 
 </section>
