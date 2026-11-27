@@ -246,6 +246,7 @@
 }
   </style>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -485,7 +486,19 @@
   <div id="historicalBusinessSummary">
     Business summaries will appear here.
   </div>
+<!-- HISTORICAL ENQUIRY ANALYTICS -->
 
+<h3>Enquiry Analytics</h3>
+
+<div style="margin-top:20px;">
+  <h4>Enquiries by Status</h4>
+  <canvas id="historicalStatusChart"></canvas>
+</div>
+
+<div style="margin-top:25px;">
+  <h4>Enquiries by Business</h4>
+  <canvas id="historicalBusinessChart"></canvas>
+</div>
 </div>
   </div>
 
@@ -1336,6 +1349,37 @@ $("historicalContacted").textContent = contactedCount;
 $("historicalInProgress").textContent = inProgressCount;
 $("historicalCompleted").textContent = completedCount;
 
+// HISTORICAL STATUS CHART
+
+if (window.historicalStatusChart instanceof Chart) {
+  window.historicalStatusChart.destroy();
+}
+
+const statusCanvas = $("historicalStatusChart");
+
+window.historicalStatusChart = new Chart(statusCanvas, {
+  type: "doughnut",
+  data: {
+    labels: ["New", "Contacted", "In Progress", "Completed"],
+    datasets: [{
+      data: [
+        newCount,
+        contactedCount,
+        inProgressCount,
+        completedCount
+      ]
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom"
+      }
+    }
+  }
+});
+
 // SUMMARY BY BUSINESS
 
 const businessSummary = $("historicalBusinessSummary");
@@ -1354,7 +1398,40 @@ Object.entries(businessCounts).forEach(function ([name, count]) {
   paragraph.textContent = name + ": " + count + " enquiries";
   businessSummary.appendChild(paragraph);
 });
+// HISTORICAL BUSINESS CHART
 
+if (window.historicalBusinessChart instanceof Chart) {
+  window.historicalBusinessChart.destroy();
+}
+
+const businessCanvas = $("historicalBusinessChart");
+
+window.historicalBusinessChart = new Chart(businessCanvas, {
+  type: "bar",
+  data: {
+    labels: Object.keys(businessCounts),
+    datasets: [{
+      label: "Historical Enquiries",
+      data: Object.values(businessCounts)
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          precision: 0
+        }
+      }
+    }
+  }
+});
 if (Object.keys(businessCounts).length === 0) {
   businessSummary.textContent = "No historical enquiries available.";
 }
