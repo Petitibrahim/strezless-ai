@@ -6,8 +6,9 @@ export async function onRequestPost({ request, env }) {
       !env.SUPABASE_URL ||
       !env.SUPABASE_SERVICE_ROLE_KEY ||
       !env.AI ||
-      !env.TURNSTILE_SECRET_KEY
-      !env.CHAT_LIMITS
+      
+      !env.TURNSTILE_SECRET_KEY ||
+!env.CHAT_LIMITS
     ) {
       return Response.json(
         { success: false, error: "Server configuration is incomplete." },
