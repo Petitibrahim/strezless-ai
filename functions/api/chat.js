@@ -46,7 +46,7 @@ export async function onRequestPost({ request, env }) {
     }
 
     const chatbotResponse = await fetch(
-      `${env.SUPABASE_URL}/rest/v1/chatbots?business_id=eq.${encodeURIComponent(business_id)} &select=bot_name,business_information,custom_instructions,is_active
+      `${env.SUPABASE_URL}/rest/v1/chatbots?business_id=eq.${encodeURIComponent(business_id)}&select=bot_name,business_information,custom_instructions,is_active`,
       { headers }
     );
 
