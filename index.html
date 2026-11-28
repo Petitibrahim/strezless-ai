@@ -867,6 +867,10 @@ section {
               placeholder="Describe your business, products, services, prices, opening hours and other important information."
             ></textarea>
 
+<label for="botInstructions">Advanced AI Instructions</label>
+<textarea id="botInstructions" rows="7" maxlength="10000"
+  placeholder="Describe how your assistant should behave, its personality, responsibilities, rules and how it should communicate with customers."></textarea>
+
             <label style="display:flex;align-items:center;gap:10px;">
               <input
                 id="botActive"
@@ -2377,9 +2381,10 @@ message.textContent =
 
     const { data, error } = await supabase
       .from("chatbots")
-      .select(
-        "id, business_id, bot_name, welcome_message, business_information, is_active"
-      )
+      
+.select(
+  "id, business_id, bot_name, welcome_message, business_information, custom_instructions, is_active"
+)
       .eq("business_id", selectedBusinessId)
       .maybeSingle();
 
@@ -2403,6 +2408,9 @@ message.textContent =
       $("botInformation").value =
         data.business_information || "";
 
+$("botInstructions").value =
+  data.custom_instructions || "";
+
       $("botActive").checked = data.is_active === true;
 
       $("chatbotStatus").textContent =
@@ -2420,6 +2428,8 @@ message.textContent =
 
       $("botInformation").value =
         business.description || "";
+
+$("botInstructions").value = "";
 
       $("botActive").checked = true;
 
@@ -2451,13 +2461,14 @@ message.textContent =
     showMessage("chatbotMessage", "Saving chatbot settings...");
 
     const chatbotData = {
-      business_id: selectedBusinessId,
-      bot_name: $("botName").value.trim(),
-      welcome_message: $("botWelcome").value.trim(),
-      business_information: $("botInformation").value.trim(),
-      is_active: $("botActive").checked,
-      updated_at: new Date().toISOString()
-    };
+  business_id: selectedBusinessId,
+  bot_name: $("botName").value.trim(),
+  welcome_message: $("botWelcome").value.trim(),
+  business_information: $("botInformation").value.trim(),
+  custom_instructions: $("botInstructions").value.trim(),
+  is_active: $("botActive").checked,
+  updated_at: new Date().toISOString()
+};
 
     if (!chatbotData.bot_name) {
       showMessage(
